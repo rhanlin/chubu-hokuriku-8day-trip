@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-Hant">
+<html lang="zh-Hant" data-theme="light">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -374,6 +374,21 @@ details.acc .acc-body{padding:0 16px 16px;font-size:13.5px;color:var(--ink-soft)
 .per-person{margin-top:16px;font-size:13px;color:var(--ink-soft);text-align:right;}
 .per-person b{font-family:var(--font-mono);color:var(--ink);}
 
+.pack-progress{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:16px 18px;animation:rise .5s ease both;}
+.pack-progress-bar{height:8px;background:var(--surface-sunk);border-radius:99px;overflow:hidden;}
+.pack-progress-bar span{display:block;height:100%;border-radius:99px;background:var(--vermilion);transition:width .25s ease;}
+.pack-progress-label{margin-top:8px;font-size:12.5px;color:var(--ink-soft);font-family:var(--font-mono);}
+.pack-group{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);margin-top:14px;overflow:hidden;animation:rise .5s ease both;}
+.pack-group-head{display:flex;justify-content:space-between;align-items:center;padding:13px 16px;border-bottom:1px solid var(--line);}
+.pack-group-head h3{font-family:var(--font-body);font-size:14px;font-weight:700;}
+.pack-group-head .cnt{font-family:var(--font-mono);font-size:12px;color:var(--ink-faint);}
+.pack-item{display:flex;align-items:center;gap:11px;padding:11px 16px;border-bottom:1px solid var(--line);cursor:pointer;}
+.pack-item:last-child{border-bottom:none;}
+.pack-item:hover{background:var(--surface-sunk);}
+.pack-item input{width:18px;height:18px;accent-color:var(--vermilion);flex-shrink:0;cursor:pointer;}
+.pack-item span{font-size:13.5px;color:var(--ink);}
+.pack-item input:checked ~ span{color:var(--ink-faint);text-decoration:line-through;}
+
 footer{max-width:920px;margin:60px auto 0;padding:20px 20px 40px;text-align:center;color:var(--ink-faint);font-size:12px;border-top:1px solid var(--line);}
 
 @keyframes rise{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
@@ -413,6 +428,7 @@ footer{max-width:920px;margin:60px auto 0;padding:20px 20px 40px;text-align:cent
       <button class="tab" data-tab="overview" role="tab">總覽</button>
       <button class="tab" data-tab="itinerary" role="tab">行程</button>
       <button class="tab" data-tab="budget" role="tab">預算</button>
+      <button class="tab" data-tab="packing" role="tab">行李</button>
     </div>
     <button class="today-pill" id="todayPill" title="跳到今天的行程"><span class="dot"></span><span>今天</span></button>
     <button class="share-btn" id="shareBtn" title="複製分享連結" aria-label="複製分享連結">⇪</button>
@@ -517,6 +533,20 @@ footer{max-width:920px;margin:60px auto 0;padding:20px 20px 40px;text-align:cent
     <div class="reminders">
       <div class="alert must"><span class="kicker">海關</span><p>每位成年旅客（滿 18 歲）免稅可攜帶合計 5 公升以內酒類入境台灣，不限瓶數但單一包裝需符合規範。</p></div>
       <div class="alert note"><span class="kicker">打包</span><p>市區購買的酒類須放入托運行李箱，不可隨身手提上機；請以氣泡袋、厚毛巾包覆並置於行李箱中央衣物夾層防震。</p></div>
+    </div>
+  </section>
+
+  <section id="view-packing" hidden>
+    <div class="section-head" style="margin-top:0;"><h2>行李清單</h2><span class="count" id="packCount"></span></div>
+    <div class="pack-progress">
+      <div class="pack-progress-bar"><span id="packProgressBar"></span></div>
+      <div class="pack-progress-label" id="packProgressLabel">0 / 0 已打包</div>
+    </div>
+    <div id="packGroups"></div>
+    <div class="section-head"><h2>行李運送備忘</h2></div>
+    <div class="reminders">
+      <div class="alert must"><span class="kicker">必看</span><p>上高地（Day3）與白川鄉（Day4）步道區行李箱無法通行：Day3 大行李留在 FAV LUX 房間；Day4 採高山寄物→白川鄉人工寄放→金澤計程車直送的三段式運送。</p></div>
+      <div class="alert note"><span class="kicker">備註</span><p>勾選狀態只存在這台裝置的瀏覽器裡，換手機或清除瀏覽器資料會重置，方便的話出發前用同一支手機打勾即可。</p></div>
     </div>
   </section>
 
@@ -718,6 +748,48 @@ var CASH_HTML =
   '<p style="margin-top:10px;"><b>新台幣現金</b>：NT$3,000隨身備用，供台灣往返機場接送小費與臨時開銷。</p>' +
   '<p style="margin-top:10px;"><b>信用卡</b>：2–3張海外高回饋Visa/Mastercard，並準備至少1張JCB卡（日本過卡率高）；確認金融卡已開通海外提款（Cirrus/Plus）並記牢密碼；iPhone可先綁定Suica/ICOCA供Apple Pay感應付款。</p>';
 
+var PACKING = [
+  {group:"證件與電子憑證", items:[
+    "護照（效期6個月以上）",
+    "華航電子機票 CI0150 / CI0155",
+    "Visit Japan Web 入境QR Code（已登錄）",
+    "4間飯店訂房確認單",
+    "南山人壽旅平險保單",
+    "KKday／Japan Bus Online 車票QR Code"
+  ]},
+  {group:"支付與現金", items:[
+    "JPY現鈔 80,000（萬円×5、千円×30）",
+    "主力高回饋信用卡 ×2",
+    "JCB信用卡 ×1",
+    "海外提款金融卡（已開通Cirrus/Plus）",
+    "新台幣現金 NT$3,000",
+    "手機已綁定 Suica/ICOCA（Apple Pay）"
+  ]},
+  {group:"行動與充電", items:[
+    "手機＋充電線",
+    "行動電源",
+    "上網 eSIM 或 Wi-Fi 分享器",
+    "萬用轉接頭（備用）"
+  ]},
+  {group:"服裝與健行裝備（Day3 上高地重點）", items:[
+    "防風保暖外套（洋蔥式穿法）",
+    "防滑健行鞋",
+    "輕便雨具／雨衣",
+    "帽子、太陽眼鏡",
+    "健行用雙肩背包"
+  ]},
+  {group:"藥品與盥洗", items:[
+    "個人常備藥品",
+    "暈車藥",
+    "隱形眼鏡／個人清潔用品"
+  ]},
+  {group:"行李空間與購物防護", items:[
+    "氣泡袋／厚毛巾（包裹酒瓶防撞）",
+    "預留行李箱空間（伴手禮、酒類）",
+    "隨身行李秤（避免超重）"
+  ]}
+];
+
 /* ---------- utilities ---------- */
 function pad(n){return n<10?"0"+n:""+n;}
 function ymd(d){return d.getFullYear()+"-"+pad(d.getMonth()+1)+"-"+pad(d.getDate());}
@@ -750,7 +822,7 @@ function renderStampRow(){
 renderStampRow();
 
 /* ---------- nav / tabs ---------- */
-var VIEWS = ["overview","itinerary","budget"];
+var VIEWS = ["overview","itinerary","budget","packing"];
 function setView(name, skipHash){
   VIEWS.forEach(function(v){
     document.getElementById("view-"+v).hidden = (v!==name);
@@ -819,6 +891,39 @@ document.getElementById("shareBtn").addEventListener("click", function(){
 
 document.getElementById("shoppingBody").innerHTML = SHOPPING_HTML;
 document.getElementById("cashBody").innerHTML = CASH_HTML;
+
+/* ---------- packing checklist ---------- */
+var PACK_KEY = "jp_chubu_trip_packing_v1";
+var packState = {};
+try{ packState = JSON.parse(localStorage.getItem(PACK_KEY)) || {}; }catch(e){ packState = {}; }
+
+function packItemId(gi, ii){ return gi+"-"+ii; }
+
+function renderPacking(){
+  var total = 0, checked = 0;
+  var html = PACKING.map(function(g, gi){
+    var groupChecked = 0;
+    var itemsHtml = g.items.map(function(item, ii){
+      var id = packItemId(gi, ii);
+      var isChecked = !!packState[id];
+      total++; if(isChecked){ checked++; groupChecked++; }
+      return '<label class="pack-item"><input type="checkbox" data-id="'+id+'" '+(isChecked?'checked':'')+'><span>'+item+'</span></label>';
+    }).join("");
+    return '<div class="pack-group"><div class="pack-group-head"><h3>'+g.group+'</h3><span class="cnt">'+groupChecked+'/'+g.items.length+'</span></div>'+itemsHtml+'</div>';
+  }).join("");
+  document.getElementById("packGroups").innerHTML = html;
+  document.getElementById("packCount").textContent = checked+" / "+total+" 已打包";
+  document.getElementById("packProgressLabel").textContent = checked+" / "+total+" 已打包";
+  document.getElementById("packProgressBar").style.width = (total? (checked/total*100) : 0)+"%";
+  document.querySelectorAll(".pack-item input").forEach(function(cb){
+    cb.addEventListener("change", function(){
+      packState[cb.dataset.id] = cb.checked;
+      try{ localStorage.setItem(PACK_KEY, JSON.stringify(packState)); }catch(e){}
+      renderPacking();
+    });
+  });
+}
+renderPacking();
 
 /* ---------- day scroller + panel ---------- */
 var currentDayIdx = activeDay || 1;
