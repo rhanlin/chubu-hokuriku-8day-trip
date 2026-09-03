@@ -1863,7 +1863,8 @@ var RECEIPT_PROMPT =
   "3) 收據上沒有的欄位就回傳空字串，絕對不要猜測或編造。4) datetime 用 ISO 8601；只有日期時時間補 00:00。" +
   "5) currency 用 ISO 代碼，日本收據通常是 JPY。6) payment_method 照收據寫的（現金／クレジット／IC 等），沒寫就留空。" +
   "7) category 從這四個裡挑最接近的一個：transport_ticket（交通、車票、門票、寄物）、food（餐飲、飲料）、" +
-  "shopping（伴手禮、名產、藥妝、酒、服飾等購物）、misc（其他零星）。";
+  "shopping（伴手禮、名產、藥妝、酒、服飾等購物）、misc（其他零星）。" +
+  "8) items 最多列 8 項（品項多時只列金額最高的 8 項），名稱保持簡短，不要補充說明。直接輸出 JSON，不要任何前後文。";
 
 var RECEIPT_SCHEMA = {
   type:"OBJECT",
@@ -1897,10 +1898,24 @@ function isModelUnavailable(err){
   return /model|not found|not available|unsupported|404/i.test(String(err && err.message || ""));
 }
 
-function callGemini(model, b64){
+/* thinking is the main latency cost on 3.x models; "low" is their minimum.
+   If a model rejects the field we retry once without it rather than failing. */
+function callGemini(model, b64, useThinkingLevel){
+  var gc = {
+    responseMimeType:"application/json",
+    responseSchema:RECEIPT_SCHEMA,
+    temperature:0,
+    maxOutputTokens:1200
+  };
+  /* thinkingLevel is a 3.x-series field; older 2.x models use thinkingConfig.thinkingBudget instead.
+     Either way, if the field is wrong the retry below drops it rather than failing the scan. */
+  if(useThinkingLevel !== false){
+    if(/^gemini-3\./.test(model)) gc.thinkingLevel = "low";
+    else if(/^gemini-2\./.test(model)) gc.thinkingConfig = {thinkingBudget:0};
+  }
   var body = {
     contents:[{parts:[{text:RECEIPT_PROMPT},{inline_data:{mime_type:"image/jpeg", data:b64}}]}],
-    generationConfig:{ responseMimeType:"application/json", responseSchema:RECEIPT_SCHEMA, temperature:0 }
+    generationConfig: gc
   };
   return fetch("https://generativelanguage.googleapis.com/v1beta/models/"+encodeURIComponent(model)+":generateContent", {
     method:"POST",
@@ -1916,6 +1931,11 @@ function callGemini(model, b64){
     var txt = c && c.content && c.content.parts && c.content.parts[0] && c.content.parts[0].text;
     if(!txt) throw new Error("沒有取得辨識結果，換個角度再拍一次");
     return parseModelJson(txt);
+  }).catch(function(err){
+    if(useThinkingLevel !== false && /thinking|budget|unknown name|invalid.*field|cannot find field/i.test(String(err && err.message || ""))){
+      return callGemini(model, b64, false);
+    }
+    throw err;
   });
 }
 
@@ -2001,13 +2021,20 @@ camInput.addEventListener("change", function(){
   if(!f) return;
   scanResult.hidden = true;
   setScanStatus("處理照片…", true);
-  compressImage(f, 1280, 0.8).then(function(b64){
+  var t0 = Date.now();
+  var ticker = setInterval(function(){
+    setScanStatus("辨識收據中…（"+Math.round((Date.now()-t0)/1000)+"s，通常 3–8 秒）", true);
+  }, 1000);
+  /* 1024px is plenty for a receipt's printed text and uploads/processes noticeably faster than 1280px */
+  compressImage(f, 1024, 0.75).then(function(b64){
     setScanStatus("辨識收據中…", true);
     return scanReceipt(b64);
   }).then(function(r){
+    clearInterval(ticker);
     applyReceipt(r);
     setScanStatus("", false);
   }).catch(function(err){
+    clearInterval(ticker);
     setScanStatus("辨識失敗：" + (err && err.message ? err.message : "未知錯誤"), false, true);
   });
 });
