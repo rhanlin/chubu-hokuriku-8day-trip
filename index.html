@@ -1,0 +1,1144 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>中部北陸八日紀行</title>
+<meta name="description" content="2026年9月9日至16日名古屋・高山・上高地・白川鄉・金澤八天七夜行程總覽、每日時間軸、路線地圖與即時匯率預算追蹤">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%E2%9B%A9%EF%B8%8F%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;700;800&family=Noto+Sans+TC:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#F3F7FF;
+  --surface:#FFFFFF;
+  --surface-sunk:#E9F0FC;
+  --ink:#182335;
+  --ink-soft:#57647C;
+  --ink-faint:#8996AC;
+  --line:#DEE7F7;
+  --line-strong:#C4D2EC;
+  --vermilion:#FF5A3C;
+  --vermilion-soft:#FFE3DA;
+  --gold:#DE9B1F;
+  --gold-soft:#FCEDC8;
+  --indigo:#1E7FE0;
+  --indigo-soft:#DCEBFF;
+  --shadow: 0 1px 2px rgba(24,35,53,.05), 0 8px 24px rgba(24,35,53,.07);
+  --radius: 16px;
+  --font-display:'Shippori Mincho', 'Noto Serif TC', serif;
+  --font-body:'Noto Sans TC','Hiragino Sans',system-ui,sans-serif;
+  --font-mono:'JetBrains Mono',ui-monospace,'SFMono-Regular',Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#0E1420;
+    --surface:#161E2C;
+    --surface-sunk:#1D2637;
+    --ink:#EAF0FA;
+    --ink-soft:#93A1B8;
+    --ink-faint:#5F6C85;
+    --line:#26314A;
+    --line-strong:#344163;
+    --vermilion:#FF8264;
+    --vermilion-soft:#3A241E;
+    --gold:#F0C063;
+    --gold-soft:#392D16;
+    --indigo:#5FA8F5;
+    --indigo-soft:#152539;
+    --shadow: 0 1px 2px rgba(0,0,0,.35), 0 10px 30px rgba(0,0,0,.4);
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#0E1420;
+  --surface:#161E2C;
+  --surface-sunk:#1D2637;
+  --ink:#EAF0FA;
+  --ink-soft:#93A1B8;
+  --ink-faint:#5F6C85;
+  --line:#26314A;
+  --line-strong:#344163;
+  --vermilion:#FF8264;
+  --vermilion-soft:#3A241E;
+  --gold:#F0C063;
+  --gold-soft:#392D16;
+  --indigo:#5FA8F5;
+  --indigo-soft:#152539;
+  --shadow: 0 1px 2px rgba(0,0,0,.35), 0 10px 30px rgba(0,0,0,.4);
+}
+*{box-sizing:border-box;}
+html{-webkit-text-size-adjust:100%;}
+body{
+  margin:0;
+  background:var(--paper);
+  color:var(--ink);
+  font-family:var(--font-body);
+  line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3{font-family:var(--font-display);text-wrap:balance;margin:0;font-weight:700;color:var(--ink);}
+p{margin:0;}
+a{color:inherit;}
+button{font-family:inherit;}
+::selection{background:var(--vermilion-soft);}
+.mono{font-family:var(--font-mono);font-variant-numeric:tabular-nums;}
+.wrap{max-width:920px;margin:0 auto;padding:0 20px;}
+[hidden]{display:none!important;}
+
+.topbar{
+  position:sticky;top:0;z-index:40;
+  background:color-mix(in srgb, var(--paper) 86%, transparent);
+  backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--line);
+}
+.topbar-inner{
+  max-width:920px;margin:0 auto;padding:12px 20px;
+  display:flex;align-items:center;gap:14px;
+}
+.brand{
+  font-family:var(--font-display);font-weight:700;font-size:16px;letter-spacing:.02em;
+  white-space:nowrap;flex-shrink:1;min-width:0;overflow:hidden;text-overflow:ellipsis;
+}
+.brand small{display:block;font-family:var(--font-body);font-weight:500;font-size:10px;color:var(--ink-soft);letter-spacing:.08em;overflow:hidden;text-overflow:ellipsis;}
+.tabs{display:flex;gap:2px;background:var(--surface-sunk);padding:3px;border-radius:999px;flex:1 1 auto;min-width:0;max-width:340px;}
+.tab{
+  flex:1;border:none;background:transparent;color:var(--ink-soft);
+  padding:7px 8px;border-radius:999px;font-size:13px;font-weight:600;cursor:pointer;
+  transition:background .2s,color .2s;white-space:nowrap;
+}
+.tab:hover{color:var(--ink);}
+.tab.active{background:var(--surface);color:var(--vermilion);box-shadow:var(--shadow);}
+.tab:focus-visible{outline:2px solid var(--indigo);outline-offset:2px;}
+.today-pill{
+  margin-left:auto;flex-shrink:0;display:none;align-items:center;gap:6px;
+  background:var(--vermilion-soft);color:var(--vermilion);border:1px solid var(--vermilion);
+  padding:5px 10px;border-radius:999px;font-size:12px;font-weight:700;cursor:pointer;
+}
+.today-pill.show{display:inline-flex;}
+.today-pill .dot{width:6px;height:6px;border-radius:50%;background:var(--vermilion);animation:pulse 1.8s ease-in-out infinite;}
+.share-btn{
+  flex-shrink:0;border:1px solid var(--line-strong);background:var(--surface);color:var(--ink-soft);
+  width:32px;height:32px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;
+  transition:color .15s,border-color .15s;
+}
+.share-btn:hover{color:var(--ink);border-color:var(--ink-soft);}
+
+main{padding-bottom:80px;}
+section{padding-top:28px;}
+
+.hero{
+  position:relative;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);
+  padding:28px 26px 24px;box-shadow:var(--shadow);overflow:hidden;
+  animation:rise .6s ease both;
+}
+.hero::after{
+  content:"";position:absolute;right:-1px;top:0;bottom:0;width:1px;
+  background-image:radial-gradient(circle, var(--paper) 2.5px, transparent 2.6px);
+  background-size:1px 14px;background-position:right center;
+}
+.hero-eyebrow{font-size:12px;letter-spacing:.14em;color:var(--vermilion);font-weight:700;text-transform:uppercase;}
+.hero h1{font-size:clamp(22px,4.5vw,34px);margin-top:6px;}
+.hero-dates{margin-top:10px;color:var(--ink-soft);font-size:14px;}
+.hero-dates .mono{color:var(--ink);font-weight:600;}
+.hero-status{
+  margin-top:16px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;
+  background:var(--surface-sunk);border-radius:10px;padding:12px 14px;
+}
+.hero-status .label{font-size:12px;color:var(--ink-soft);}
+.hero-status .value{font-family:var(--font-mono);font-weight:700;font-size:15px;}
+.hero-status.today .value{color:var(--vermilion);}
+.hero-status a.jump{
+  margin-left:auto;font-size:12px;font-weight:700;color:var(--vermilion);text-decoration:none;
+  border:1px solid var(--vermilion);padding:5px 10px;border-radius:999px;
+}
+
+.stat-row{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;margin-top:16px;animation:rise .6s .05s ease both;}
+.stat{background:var(--surface);padding:16px 10px;text-align:center;}
+.stat .num{font-family:var(--font-mono);font-weight:700;font-size:22px;color:var(--indigo);}
+.stat .lbl{font-size:11px;color:var(--ink-soft);margin-top:2px;}
+
+.section-head{display:flex;align-items:baseline;gap:10px;margin:36px 0 14px;flex-wrap:wrap;}
+.section-head h2{font-size:20px;}
+.section-head .count{font-size:12px;color:var(--ink-faint);font-family:var(--font-mono);}
+
+.map-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:18px 18px 14px;position:relative;animation:rise .6s .1s ease both;}
+.map-card .cap{font-size:12px;color:var(--ink-faint);margin-top:6px;text-align:center;letter-spacing:.02em;}
+.map-canvas-wrap{position:relative;width:100%;height:340px;}
+.map-canvas-wrap.small{height:130px;}
+canvas{display:block;width:100%;height:100%;}
+.live-dot{
+  position:absolute;width:14px;height:14px;border-radius:50%;background:var(--vermilion);
+  transform:translate(-50%,-50%);pointer-events:none;box-shadow:0 0 0 4px color-mix(in srgb, var(--vermilion) 25%, transparent);
+}
+.live-dot::after{
+  content:"";position:absolute;inset:-8px;border-radius:50%;border:2px solid var(--vermilion);
+  animation:pulsering 2.2s ease-out infinite;
+}
+.live-dot.start{background:var(--indigo);box-shadow:0 0 0 4px color-mix(in srgb, var(--indigo) 25%, transparent);}
+.live-dot.start::after{border-color:var(--indigo);}
+.live-dot.done{background:var(--gold);box-shadow:0 0 0 4px color-mix(in srgb, var(--gold) 25%, transparent);}
+.live-dot.done::after{display:none;}
+
+.reminders{display:flex;flex-direction:column;gap:10px;}
+.alert{
+  display:flex;gap:12px;padding:12px 14px;border-radius:10px;background:var(--surface);
+  border:1px solid var(--line);border-left:4px solid var(--ink-faint);
+}
+.alert.must{border-left-color:var(--vermilion);}
+.alert.tip{border-left-color:var(--indigo);}
+.alert.note{border-left-color:var(--gold);}
+.alert .kicker{flex-shrink:0;font-size:11px;font-weight:700;letter-spacing:.06em;padding:2px 8px;border-radius:999px;height:fit-content;white-space:nowrap;}
+.alert.must .kicker{color:var(--vermilion);background:var(--vermilion-soft);}
+.alert.tip .kicker{color:var(--indigo);background:var(--indigo-soft);}
+.alert.note .kicker{color:var(--gold);background:var(--gold-soft);}
+.alert p{font-size:13.5px;color:var(--ink);}
+
+.ticket-table{width:100%;border-collapse:collapse;font-size:13px;min-width:560px;}
+.ticket-table th{text-align:left;font-size:11px;color:var(--ink-faint);font-weight:600;padding:8px 10px;border-bottom:1px solid var(--line-strong);letter-spacing:.04em;}
+.ticket-table td{padding:10px;border-bottom:1px solid var(--line);vertical-align:top;}
+.ticket-table tr:last-child td{border-bottom:none;}
+.ticket-table .seat{font-family:var(--font-mono);}
+.table-scroll{overflow-x:auto;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);-webkit-overflow-scrolling:touch;}
+.badge-ok{display:inline-block;font-size:11px;font-weight:700;color:var(--indigo);background:var(--indigo-soft);padding:2px 8px;border-radius:999px;white-space:nowrap;}
+
+details.acc{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:2px 4px;}
+details.acc summary{cursor:pointer;list-style:none;padding:14px 16px;font-weight:700;font-size:14px;display:flex;justify-content:space-between;align-items:center;gap:10px;}
+details.acc summary::-webkit-details-marker{display:none;}
+details.acc summary::after{content:"+";font-family:var(--font-mono);font-size:18px;color:var(--ink-faint);flex-shrink:0;}
+details.acc[open] summary::after{content:"–";}
+details.acc .acc-body{padding:0 16px 16px;font-size:13.5px;color:var(--ink-soft);}
+.tag-row{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px;}
+.tagchip{font-size:12px;background:var(--surface-sunk);padding:3px 9px;border-radius:999px;color:var(--ink);}
+
+.day-scroller{
+  display:flex;gap:8px;overflow-x:auto;padding:4px 2px 16px;
+  scrollbar-width:none;-webkit-overflow-scrolling:touch;
+}
+.day-scroller::-webkit-scrollbar{display:none;}
+.day-chip{
+  flex:0 0 116px;width:116px;background:var(--surface);border:1px solid var(--line);border-radius:12px;
+  padding:9px 12px;cursor:pointer;text-align:left;position:relative;
+  transition:border-color .15s,transform .15s;
+}
+.day-chip:hover{border-color:var(--indigo);}
+.day-chip.active{background:var(--ink);border-color:var(--ink);}
+.day-chip.active .dn, .day-chip.active .dd, .day-chip.active .dr{color:var(--paper);}
+.day-chip .dn{font-family:var(--font-mono);font-weight:700;font-size:13px;color:var(--indigo);}
+.day-chip.active .dn{color:var(--vermilion-soft);}
+.day-chip .dd{font-size:10.5px;color:var(--ink-soft);margin-top:1px;}
+.day-chip .dr{font-size:11px;color:var(--ink-faint);margin-top:4px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;line-height:1.35;min-height:2.7em;}
+.day-chip .today-dot{position:absolute;top:6px;right:7px;width:6px;height:6px;border-radius:50%;background:var(--vermilion);animation:pulse 1.8s ease-in-out infinite;}
+
+.day-panel{animation:rise .35s ease both;}
+.day-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap;margin-bottom:16px;}
+.day-head h2{font-size:clamp(18px,5vw,22px);}
+.day-head .sub{color:var(--ink-soft);font-size:13.5px;margin-top:4px;}
+.hotel-tag{
+  background:var(--surface-sunk);border-radius:10px;padding:8px 12px;font-size:12.5px;
+  display:flex;align-items:center;gap:8px;flex-shrink:0;
+}
+.hotel-tag .h-label{color:var(--ink-faint);font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;}
+
+.timeline{position:relative;margin-top:8px;}
+.timeline::before{content:"";position:absolute;left:58px;top:6px;bottom:6px;width:1px;background:var(--line-strong);}
+.t-item{display:grid;grid-template-columns:58px 1fr;gap:12px;position:relative;padding-bottom:20px;}
+.t-item:last-child{padding-bottom:0;}
+.t-time{font-family:var(--font-mono);font-size:12px;font-weight:700;text-align:right;padding-top:11px;color:var(--ink-soft);}
+.t-time .end{display:block;font-weight:400;color:var(--ink-faint);font-size:10.5px;}
+.t-node{position:absolute;left:52px;top:14px;width:13px;height:13px;border-radius:50%;background:var(--paper);border:2px solid var(--line-strong);}
+.t-card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 14px;box-shadow:var(--shadow);}
+.t-item.current .t-node{border-color:var(--vermilion);background:var(--vermilion);animation:pulse 1.8s ease-in-out infinite;}
+.t-item.current .t-card{border-color:var(--vermilion);}
+.t-item.next .t-node{border-color:var(--indigo);background:var(--indigo);}
+.t-item.next .t-card{border-color:var(--indigo);}
+.t-item.past .t-card{opacity:.55;}
+.t-title-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+.t-icon{width:26px;height:26px;border-radius:8px;background:var(--surface-sunk);display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;}
+.t-title{font-weight:700;font-size:14px;}
+.now-flag,.next-flag{font-size:10.5px;font-weight:700;letter-spacing:.04em;padding:2px 7px;border-radius:999px;}
+.now-flag{background:var(--vermilion);color:#fff;}
+.next-flag{background:var(--indigo-soft);color:var(--indigo);}
+.t-detail{font-size:13px;color:var(--ink-soft);margin-top:5px;}
+.status-pill{display:inline-block;margin-top:7px;font-size:11px;font-weight:700;padding:2px 8px;border-radius:999px;}
+.status-pill.booked{background:var(--indigo-soft);color:var(--indigo);}
+.status-pill.queue{background:var(--vermilion-soft);color:var(--vermilion);}
+.status-pill.open{background:var(--surface-sunk);color:var(--ink-soft);}
+
+.luggage-note{margin-top:22px;font-size:13px;color:var(--ink-soft);background:var(--surface-sunk);border-radius:10px;padding:10px 14px;}
+.luggage-note b{color:var(--ink);}
+
+.day-nav{display:flex;justify-content:space-between;margin-top:26px;gap:10px;}
+.day-nav button{
+  background:var(--surface);border:1px solid var(--line-strong);border-radius:10px;padding:10px 14px;
+  font-size:13px;font-weight:600;cursor:pointer;color:var(--ink);flex:1;
+}
+.day-nav button:disabled{opacity:.35;cursor:default;}
+.day-nav button:not(:disabled):hover{border-color:var(--indigo);color:var(--indigo);}
+
+.fx-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:18px 20px;animation:rise .5s ease both;}
+.fx-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.fx-eq{font-family:var(--font-mono);font-size:14px;color:var(--ink-soft);}
+.fx-input{
+  font-family:var(--font-mono);font-size:16px;font-weight:700;width:100px;padding:7px 10px;
+  border:1px solid var(--line-strong);border-radius:8px;background:var(--paper);color:var(--ink);
+}
+.fx-input:focus-visible{outline:2px solid var(--indigo);outline-offset:1px;}
+.fx-refresh{
+  font-size:12px;color:var(--indigo);background:var(--indigo-soft);border:none;border-radius:999px;
+  padding:6px 12px;cursor:pointer;font-weight:700;display:inline-flex;align-items:center;gap:6px;
+}
+.fx-refresh:disabled{opacity:.6;cursor:default;}
+.fx-refresh .spin{display:inline-block;width:10px;height:10px;border-radius:50%;border:2px solid var(--indigo);border-top-color:transparent;animation:spin .7s linear infinite;}
+.fx-meta{font-size:11.5px;color:var(--ink-faint);margin-top:10px;}
+.fx-meta.live{color:var(--indigo);}
+.fx-meta.err{color:var(--vermilion);}
+.fx-note{font-size:11.5px;color:var(--ink-faint);margin-top:6px;}
+
+.total-card{
+  margin-top:16px;background:var(--ink);color:var(--paper);border-radius:var(--radius);padding:24px 22px;
+  display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;
+  box-shadow:var(--shadow);animation:rise .5s .05s ease both;
+}
+.total-card .tl{font-size:12px;letter-spacing:.06em;text-transform:uppercase;opacity:.65;}
+.total-card .tv{font-family:var(--font-mono);font-weight:700;font-size:clamp(26px,7vw,40px);margin-top:2px;}
+.total-card .delta{font-family:var(--font-mono);font-size:13px;padding:5px 10px;border-radius:999px;font-weight:700;}
+.delta.save{background:color-mix(in srgb, var(--gold) 35%, transparent);color:#FFE7AE;}
+.delta.over{background:color-mix(in srgb, var(--vermilion) 35%, transparent);color:#FFC7B7;}
+.delta.flat{background:rgba(255,255,255,.14);color:var(--paper);}
+.total-sub{font-size:12px;opacity:.65;margin-top:2px;}
+
+.ledger{margin-top:18px;display:flex;flex-direction:column;gap:1px;background:var(--line);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);}
+.lrow{background:var(--surface);padding:14px 16px;}
+.lrow-top{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap;}
+.lrow-name{font-weight:700;font-size:14px;}
+.lrow-desc{font-size:12px;color:var(--ink-faint);margin-top:2px;}
+.lrow-amt{text-align:right;flex-shrink:0;}
+.lrow-twd{font-family:var(--font-mono);font-weight:700;font-size:16px;}
+.lrow-jpy{font-family:var(--font-mono);font-size:11.5px;color:var(--ink-soft);}
+.lrow-bar{height:5px;background:var(--surface-sunk);border-radius:99px;margin-top:10px;overflow:hidden;}
+.lrow-bar span{display:block;height:100%;border-radius:99px;}
+.lrow.fixed .lrow-bar span{background:var(--indigo);}
+.lrow.floating .lrow-bar span{background:var(--gold);}
+.lrow-tags{margin-top:8px;}
+
+.legend{display:flex;gap:18px;margin-top:14px;font-size:12px;color:var(--ink-soft);flex-wrap:wrap;}
+.legend span{display:inline-flex;align-items:center;gap:6px;}
+.legend i{width:9px;height:9px;border-radius:2px;display:inline-block;}
+
+.per-person{margin-top:16px;font-size:13px;color:var(--ink-soft);text-align:right;}
+.per-person b{font-family:var(--font-mono);color:var(--ink);}
+
+footer{max-width:920px;margin:60px auto 0;padding:20px 20px 40px;text-align:center;color:var(--ink-faint);font-size:12px;border-top:1px solid var(--line);}
+
+@keyframes rise{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:.35;}}
+@keyframes pulsering{0%{transform:scale(.6);opacity:.9;}100%{transform:scale(1.9);opacity:0;}}
+@keyframes spin{to{transform:rotate(360deg);}}
+
+@media (prefers-reduced-motion: reduce){
+  *{animation-duration:.001ms!important;animation-iteration-count:1!important;}
+}
+@media (max-width:600px){
+  .wrap{padding:0 14px;}
+  .topbar-inner{padding:10px 14px;gap:8px;}
+  .brand{max-width:30vw;font-size:14px;}
+  .brand small{display:none;}
+  .tabs{max-width:none;}
+  .hero{padding:20px 18px 18px;}
+  .stat-row{grid-template-columns:repeat(2,1fr);}
+  .stat{padding:14px 8px;}
+  .map-canvas-wrap{height:280px;}
+  .map-canvas-wrap.small{height:110px;}
+  .section-head{margin:28px 0 12px;}
+}
+@media (max-width:380px){
+  .brand{max-width:22vw;}
+  .today-pill span:last-child{display:none;}
+  .today-pill{padding:5px 8px;}
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-inner">
+    <div class="brand">中部北陸紀行<small>NAGOYA · TAKAYAMA · KANAZAWA</small></div>
+    <div class="tabs" role="tablist">
+      <button class="tab" data-tab="overview" role="tab">總覽</button>
+      <button class="tab" data-tab="itinerary" role="tab">行程</button>
+      <button class="tab" data-tab="budget" role="tab">預算</button>
+    </div>
+    <button class="today-pill" id="todayPill" title="跳到今天的行程"><span class="dot"></span><span>今天</span></button>
+    <button class="share-btn" id="shareBtn" title="複製分享連結" aria-label="複製分享連結">⇪</button>
+  </div>
+</div>
+
+<main class="wrap">
+
+  <section id="view-overview">
+    <div class="hero">
+      <div class="hero-eyebrow">TRAVEL RECORD · 2 人成行</div>
+      <h1>8天7夜 日本中部長野北陸之旅</h1>
+      <div class="hero-dates">
+        <span class="mono" id="tripDateRange">2026.09.09 – 2026.09.16</span>　名古屋 → 高山 → 上高地 → 白川鄉 → 金澤 → 名古屋
+      </div>
+      <div class="hero-status" id="heroStatus">
+        <span class="label">狀態</span>
+        <span class="value" id="heroStatusValue">計算中…</span>
+        <a class="jump" id="heroJump" href="#itinerary" hidden>查看今天</a>
+      </div>
+    </div>
+
+    <div class="stat-row">
+      <div class="stat"><div class="num">8</div><div class="lbl">天 7 夜</div></div>
+      <div class="stat"><div class="num">5</div><div class="lbl">城鎮 / 秘境</div></div>
+      <div class="stat"><div class="num">4</div><div class="lbl">間住宿</div></div>
+      <div class="stat"><div class="num mono" id="statBudget">—</div><div class="lbl">預估總花費 NT$</div></div>
+    </div>
+
+    <div class="section-head"><h2>行程路線</h2><span class="count">一圈迴路・8 個停留點</span></div>
+    <div class="map-card">
+      <div class="map-canvas-wrap"><canvas id="loopMap"></canvas></div>
+      <div class="cap">上高地為 Day 3 的一日來回支線，其餘為主要移動路徑</div>
+    </div>
+
+    <div class="section-head"><h2>行前重要提醒</h2><span class="count" id="remCount"></span></div>
+    <div class="reminders" id="remindersList"></div>
+
+    <div class="section-head"><h2>已確認訂票憑證</h2><span class="count">長途交通・100% 已購妥</span></div>
+    <div class="table-scroll">
+      <table class="ticket-table">
+        <thead><tr><th>日期</th><th>路段 / 車次</th><th>時間</th><th>座位</th><th>狀態</th></tr></thead>
+        <tbody id="ticketBody"></tbody>
+      </table>
+    </div>
+
+    <div class="section-head"><h2>伴手禮與買酒指南</h2><span class="count">依地點分類・僅供參考</span></div>
+    <details class="acc">
+      <summary>飛驒高山・金澤・名古屋 — 該買什麼、去哪買</summary>
+      <div class="acc-body" id="shoppingBody"></div>
+    </details>
+
+  </section>
+
+  <section id="view-itinerary" hidden>
+    <div class="day-scroller" id="dayScroller"></div>
+    <div class="map-card" style="margin-bottom:20px;">
+      <div class="map-canvas-wrap small"><canvas id="dayMap"></canvas></div>
+    </div>
+    <div class="day-panel" id="dayPanel"></div>
+  </section>
+
+  <section id="view-budget" hidden>
+    <div class="section-head" style="margin-top:0;"><h2>即時匯率換算</h2></div>
+    <div class="fx-card">
+      <div class="fx-row">
+        <span class="fx-eq">1 JPY =</span>
+        <input class="fx-input mono" id="fxInput" type="number" step="0.0001" min="0.01" max="1" inputmode="decimal">
+        <span class="fx-eq">TWD</span>
+        <button class="fx-refresh" id="fxRefresh"><span id="fxRefreshIcon">↻</span> 重新整理匯率</button>
+      </div>
+      <div class="fx-meta" id="fxMeta">正在取得即時匯率…</div>
+      <div class="fx-note">下方所有「尚未發生」的日圓金額會依此匯率即時重新計算；你也可以手動輸入銀行/刷卡實際匯率覆蓋。原始預算編列採用 1 JPY ≈ 0.205 TWD 作為對照基準。</div>
+    </div>
+
+    <div class="total-card">
+      <div>
+        <div class="tl">雙人預估總花費</div>
+        <div class="tv mono" id="totalTwd">NT$ —</div>
+        <div class="total-sub" id="totalSub"></div>
+      </div>
+      <div class="delta flat" id="deltaChip">—</div>
+    </div>
+    <div class="per-person">平均每人約 <b class="mono" id="perPerson">—</b></div>
+
+    <div class="section-head"><h2>費用結構</h2></div>
+    <div class="legend">
+      <span><i style="background:var(--indigo)"></i>已付款・固定金額</span>
+      <span><i style="background:var(--gold)"></i>尚未發生・即時匯率換算</span>
+    </div>
+    <div class="ledger" id="ledger"></div>
+
+    <div class="section-head"><h2>攜帶資金與支付方式</h2></div>
+    <details class="acc" open>
+      <summary>現金 / 信用卡準備清單</summary>
+      <div class="acc-body" id="cashBody"></div>
+    </details>
+
+    <div class="section-head"><h2>買酒回台規範</h2></div>
+    <div class="reminders">
+      <div class="alert must"><span class="kicker">海關</span><p>每位成年旅客（滿 18 歲）免稅可攜帶合計 5 公升以內酒類入境台灣，不限瓶數但單一包裝需符合規範。</p></div>
+      <div class="alert note"><span class="kicker">打包</span><p>市區購買的酒類須放入托運行李箱，不可隨身手提上機；請以氣泡袋、厚毛巾包覆並置於行李箱中央衣物夾層防震。</p></div>
+    </div>
+  </section>
+
+</main>
+
+<footer>資料整理自個人行程筆記，僅供本次旅行參考使用 · 匯率由公開匯率 API 即時取得，實際支出以現場刷卡 / 兌換為準</footer>
+
+<script>
+(function(){
+"use strict";
+
+var TRIP_START = "2026-09-09";
+var TRIP_END = "2026-09-16";
+var FX_PLAN = 0.205;
+var FX_DEFAULT = 0.1995;
+var FX_KEY = "jp_chubu_trip_fx_rate";
+var FX_CACHE_KEY = "jp_chubu_trip_fx_cache";
+
+var DAYS = [
+  {n:1,date:"2026-09-09",weekday:"二",route:"中部國際機場 → 名古屋",hotel:"名古屋JR門樓酒店",hotelNote:"與JR名古屋站直結，15樓大廳",
+   mapNodes:[{label:"NGO 機場",icon:"✈️"},{label:"名鐵名古屋",icon:"🚄"},{label:"JR門樓酒店",icon:"🏨"}],
+   timeline:[
+     {time:"21:05",end:"21:55",icon:"✈️",title:"班機降落與入境通關",detail:"華航 CI0150 抵達 NGO 第一航廈，完成檢疫、入境查驗（Visit Japan Web QR）並提領托運行李。"},
+     {time:"21:55",end:"22:05",icon:"🚶",title:"入境大廳 → 名鐵機場站",detail:"步行約 3–5 分鐘穿過交通廣場，直達名鐵剪票口。"},
+     {time:"22:07",end:"22:36",icon:"🚄",title:"μ-SKY 直達名鐵名古屋",detail:"全車特別車對號座，大行李置於車廂行李架。備案：22:17 / 22:47 名鐵特急。",status:"open",statusText:"隨到隨搭"},
+     {time:"22:40",end:"23:00",icon:"🏨",title:"轉往名古屋JR門樓酒店",detail:"沿 JR「櫻通口」方向步行，搭乘直達電梯至 15 樓飯店大廳 Check-in。"}
+   ],
+   alerts:[
+     {level:"must",text:"抵達當夜請務必至 JR 名古屋站「e5489」標誌機台，用 KKday QR code 兌換明日飛驒號車票（每人 2 張：乘車券＋特急券）。"},
+     {level:"note",text:"末班車保底：往名古屋市區末班準急 23:31 發車，次日 00:19 抵名鐵名古屋。"}
+   ],
+   luggage:"隨身攜帶上車，飯店與車站直結、全程室內無障礙。"
+  },
+  {n:2,date:"2026-09-10",weekday:"三",route:"名古屋 → 高山",hotel:"FAV LUX 飛驒高山",hotelNote:"JR高山站西口步行約5分鐘（連住2晚）",
+   mapNodes:[{label:"名古屋站",icon:"🏨"},{label:"JR特急飛驒3號",icon:"🚄"},{label:"高山老街",icon:"🍡"},{label:"飛驒之里",icon:"🏘️"}],
+   timeline:[
+     {time:"07:30",end:"08:20",icon:"🏨",title:"門樓酒店退房與早餐",detail:"飯店與 JR 名古屋站直結，下樓即達中央剪票口，時間充裕。"},
+     {time:"08:43",end:"10:58",icon:"🚄",title:"特急飛驒 3 號　名古屋 → 高山",detail:"HC85系新型混能特急，車程 2 小時 15 分，大行李置於車廂行李架。",status:"booked",statusText:"7車 6C/6D・KKday憑證"},
+     {time:"10:58",end:"11:20",icon:"🚶",title:"高山站 → FAV LUX 寄放行李",detail:"出西口步行 5 分鐘，先寄放大行李，輕裝出發逛街。"},
+     {time:"11:25",end:"13:40",icon:"🍡",title:"高山老街散策 & 午餐",detail:"三町通品嚐飛驒牛握壽司、飛驒牛串燒或午間定食，順路逛宮川朝市周邊。"},
+     {time:"14:00",end:"16:15",icon:"🏘️",title:"飛驒之里（飛騨の里）",detail:"搭乘 Sarubobo 巴士（濃飛巴士中心1號月台，單程250円）往返，參觀合掌造聚落與民俗工藝。",status:"open",statusText:"免預約・刷IC卡"},
+     {time:"17:00",end:"19:00",icon:"🥩",title:"丸明 飛驒高山店　晚餐",detail:"門口登記簿填名制，飛驒牛燒肉盛合拼盤。",status:"queue",statusText:"現場排隊・16:45前抵達"}
+   ],
+   alerts:[
+     {level:"must",text:"丸明無法電話預約，晚間 17:00 開門，建議 16:45–17:00 抵達門口填寫姓名人數以搶第一輪；超過 17:30 恐候 45–60 分。備案：西口步行2分的「味藏天國」。"},
+     {level:"tip",text:"三町通「舩坂酒造店」「原田酒造場」設有投幣式豬口杯試飲，可現場採購飛驒銘酒「深山菊」「山車」。"},
+     {level:"note",text:"上高地往返車票需於高山濃飛巴士中心人工窗口現場購買（約 5,800 円/人），免預約排隊上車。"}
+   ],
+   luggage:"抵達即寄放於 FAV LUX 櫃檯，Check-in 前輕裝出遊。"
+  },
+  {n:3,date:"2026-09-11",weekday:"四",route:"上高地一日遊",hotel:"FAV LUX 飛驒高山",hotelNote:"連住第2晚",
+   mapNodes:[{label:"高山",icon:"🏨"},{label:"平湯溫泉",icon:"🚌"},{label:"大正池",icon:"🌲"},{label:"河童橋",icon:"🏞️"}],
+   timeline:[
+     {time:"06:40",end:"07:00",icon:"🚶",title:"步行至濃飛巴士中心",detail:"高山站東口濃飛巴士中心 5 號月台排隊。"},
+     {time:"07:00",end:"08:18",icon:"🚌",title:"高山 → 平湯溫泉 → 大正池",detail:"平湯溫泉同站轉乘接駁車，於「大正池」下車。全段免預約，依現場排隊上車。",status:"open",statusText:"免預約・首選班次"},
+     {time:"08:20",end:"11:30",icon:"🥾",title:"大正池 → 河童橋（健行）",detail:"步道平緩，全長約3.5公里、約2–2.5小時，途經田代池、田代濕原、梓川步道。"},
+     {time:"11:30",end:"13:30",icon:"🏞️",title:"河童橋周邊散策 & 午餐",detail:"欣賞穗高連峰，於五千尺Hotel或巴士總站2F食堂用餐（岩魚定食、飛驒牛燉飯）。"},
+     {time:"14:00",end:"15:31",icon:"🚌",title:"上高地 → 平湯溫泉 → 高山",detail:"搭乘回程巴士返回高山濃飛巴士中心。",status:"open",statusText:"免預約"},
+     {time:"17:30",end:"19:30",icon:"🍽️",title:"晚餐",detail:"丸明補吃方案，或「味藏天國」「中華蕎麥 桔梗屋」高山拉麵。"}
+   ],
+   alerts:[
+     {level:"must",text:"務必在「大正池站」按下車鈴下車，切勿坐到終點站！由大正池平緩漫步至河童橋為最經典省力動線。"},
+     {level:"tip",text:"上高地海拔約1,500公尺，較高山市區低5–8°C，請洋蔥式穿法並著防滑健行鞋。"},
+     {level:"note",text:"旺季可能發放回程「乘車整理券」，抵達河童橋後可先至巴士總站窗口確認是否需領號。"}
+   ],
+   luggage:"大行李留置飯店房間，僅背健行雙肩包（保暖外套、水、雨具）。"
+  },
+  {n:4,date:"2026-09-12",weekday:"五",route:"高山 → 白川鄉合掌村 → 金澤",hotel:"THE HOTEL SANRAKU KANAZAWA",hotelNote:"金澤山樂酒店・近近江町市場（連住2晚）",
+   mapNodes:[{label:"高山",icon:"🏨"},{label:"白川鄉",icon:"🏘️"},{label:"金澤西口",icon:"🚕"},{label:"山樂酒店",icon:"🏨"}],
+   timeline:[
+     {time:"08:30",end:"08:55",icon:"🚶",title:"FAV LUX 退房 → 巴士中心寄放行李",detail:"退房後推大行李穿過車站通道至東口濃飛巴士中心寄物。"},
+     {time:"08:55",end:"11:45",icon:"🍡",title:"宮川朝市 & 老街悠閒巡禮",detail:"飛驒牛奶、烤糰子、布丁，漫步三町通古街與高山陣屋。"},
+     {time:"12:10",end:"13:00",icon:"🚌",title:"濃飛巴士 0044 便　高山 → 白川鄉",detail:"6A/6B 行駛方向左側景觀位，出飛驒隧道可俯瞰合掌聚落全景。大行李置於車底行李艙。",status:"booked",statusText:"6A/6B・高山4號月台"},
+     {time:"13:00",end:"17:15",icon:"🏘️",title:"白川鄉聚落漫步 & 城跡展望台",detail:"人工行李寄存（約800–1,000円/件）；接駁車上荻町城跡展望台（單程200円），參觀和田家合掌造內部。"},
+     {time:"17:30",end:"18:45",icon:"🚌",title:"濃飛巴士 0004 便　白川鄉 → 金澤西口",detail:"直達金澤站西口，大行李置於車底行李艙。",status:"booked",statusText:"10C/10D・白川鄉3號月台"},
+     {time:"18:50",end:"19:05",icon:"🚕",title:"金澤西口 → 山樂酒店",detail:"西口排班處直接搭計程車（車程約6–8分，約1,100–1,300円）。"},
+     {time:"19:20",end:null,icon:"🍽️",title:"近江町市場周邊晚餐",detail:"北陸鮮魚丼飯、居酒屋或在地黑喉料理。"}
+   ],
+   alerts:[
+     {level:"must",text:"17:15 前務必回白川鄉巴士總站取回寄放行李，避免接近 17:30 發車時間排隊取件過於倉促。"},
+     {level:"tip",text:"高山→白川鄉段建議坐 6A/6B（左側景觀位），出飛驒隧道瞬間可俯瞰合掌聚落全貌。"},
+     {level:"note",text:"金澤西口下車即為計程車排班處，無需拖行李穿越人潮眾多的車站大廳。"}
+   ],
+   luggage:"三段式運送：高山寄物 → 白川鄉人工寄放 → 金澤西口計程車直送飯店。"
+  },
+  {n:5,date:"2026-09-13",weekday:"六",route:"金澤市區深度漫遊",hotel:"THE HOTEL SANRAKU KANAZAWA",hotelNote:"連住第2晚",
+   mapNodes:[{label:"山樂酒店",icon:"🏨"},{label:"近江町市場",icon:"🍣"},{label:"東茶屋街",icon:"🍵"},{label:"兼六園",icon:"🌸"},{label:"金澤城",icon:"🏯"}],
+   timeline:[
+     {time:"08:30",end:"08:40",icon:"🚶",title:"山樂酒店 → 近江町市場",detail:"純步行約350公尺，4–5分鐘。"},
+     {time:"08:40",end:"11:30",icon:"🍣",title:"近江町市場巡禮",detail:"もりもり壽司抽號碼牌後，先逛島田水産生蠔海膽、Omicho可樂餅，再進場享用黑喉、白蝦。",status:"queue",statusText:"現場抽號・08:40先抽"},
+     {time:"11:45",end:"13:30",icon:"🍵",title:"東茶屋街散策",detail:"木造格子窗老街，箔一東山店金箔冰淇淋，參觀志摩、懷華樓等傳統茶屋。"},
+     {time:"13:50",end:"14:40",icon:"☕",title:"SWAY COFFEE ROASTER",detail:"自家烘焙手沖咖啡與甜點，小憩補充體力。"},
+     {time:"14:40",end:"16:30",icon:"🌸",title:"兼六園",detail:"日本三大名園之一，徽軫石燈籠、霞之池、時雨亭（門票320円）。"},
+     {time:"16:30",end:"17:30",icon:"🏯",title:"金澤城公園",detail:"菱櫓、五十間長屋、石垣（園區免費，長屋內部參觀至16:45）。"},
+     {time:"18:00",end:"19:15",icon:"🍛",title:"Turban 咖哩 本店　晚餐",detail:"經典金澤咖哩：不鏽鋼盤盛裝、高麗菜絲、濃黑醬汁炸豬排。座位僅吧檯約10席，翻桌快。"}
+   ],
+   alerts:[
+     {level:"must",text:"もりもり壽司市場店人潮極多，08:40–08:45 先至門口抽紙本號碼牌，掃 QR 隨時確認叫號進度，過號需重新排隊。"},
+     {level:"note",text:"箔一金箔冰淇淋依金澤市規範，須於店家內用區或門前定點食用，禁止邊走邊吃。"},
+     {level:"tip",text:"市區以步行為主，輔以1–2次短程公車，後門上車刷IC卡、前門下車再感應，單程約210円。"}
+   ],
+   luggage:"大行李全天留置山樂酒店房間，輕裝隨身包出發。"
+  },
+  {n:6,date:"2026-09-14",weekday:"日",route:"金澤 → 名古屋",hotel:"NIKKO STYLE NAGOYA",hotelNote:"名古屋日航尚格酒店（連住2晚）",
+   mapNodes:[{label:"金澤",icon:"🏨"},{label:"敦賀轉乘",icon:"🚄"},{label:"名古屋站",icon:"🏨"},{label:"YORONIKU",icon:"🥩"},{label:"綠洲21",icon:"🌃"}],
+   timeline:[
+     {time:"08:00",end:"09:10",icon:"🏨",title:"山樂酒店早餐與退房",detail:"享用自助早餐，辦理退房手續。"},
+     {time:"09:15",end:"09:30",icon:"🚕",title:"山樂酒店 → 金澤站",detail:"飯店門口搭計程車直達東口，車程約5分鐘，約1,000円。"},
+     {time:"09:55",end:"10:36",icon:"🚄",title:"北陸新幹線 Tsurugi 15　金澤 → 敦賀",detail:"3車11A/11B，車程41分，抵達敦賀站3樓月台。",status:"booked",statusText:"3車 11A/11B"},
+     {time:"10:36",end:"11:10",icon:"🛗",title:"敦賀站立體轉乘",detail:"搭專屬電扶梯/電梯由3樓下至1樓在來線月台，34分鐘轉乘時間充裕。"},
+     {time:"11:10",end:"12:48",icon:"🚄",title:"特急白鷺 6 號　敦賀 → 名古屋",detail:"5車6C/6D，車程1小時38分，直達JR名古屋站。",status:"booked",statusText:"5車 6C/6D"},
+     {time:"12:55",end:"13:20",icon:"🚕",title:"名古屋站 → 日航尚格酒店",detail:"廣小路口搭計程車（約5分，700–800円）直送櫃檯寄存大行李。"},
+     {time:"13:30",end:"16:30",icon:"🍰",title:"榮商圈 HARBS 午茶 & 逛街",detail:"招牌水果千層蛋糕，久屋大通公園、松坂屋、PARCO。"},
+     {time:"16:50",end:"19:00",icon:"🥩",title:"YORONIKU NAGOYA　頂級燒肉晚餐",detail:"全套專人桌邊代烤，2人席。",status:"booked",statusText:"已預約 17:00・16:50前報到"},
+     {time:"19:15",end:"21:00",icon:"🌃",title:"綠洲21「水之宇宙船」夜景",detail:"天橋散步消食，欣賞電視塔夜間點燈，之後返回日航尚格正式Check-in。"}
+   ],
+   alerts:[
+     {level:"must",text:"YORONIKU 為全程唯一需網路預約的餐廳，全套專人代烤，遲到將壓縮用餐時間甚至被取消席位 — 務必 16:50 前抵達門口報到！"},
+     {level:"tip",text:"HARBS 建議以千層蛋糕為主、避免點過多鹹食，為17:00和牛大餐保留最佳食慾。"},
+     {level:"note",text:"敦賀站轉乘設有多部大型電梯與電扶梯，34分鐘極充裕，無需提行李奔波。"}
+   ],
+   luggage:"隨新幹線及特急隨身攜帶，抵名古屋後計程車直送飯店寄存。"
+  },
+  {n:7,date:"2026-09-15",weekday:"一",route:"名古屋市區經典一日遊",hotel:"NIKKO STYLE NAGOYA",hotelNote:"連住第2晚",
+   mapNodes:[{label:"名駅",icon:"🍞"},{label:"熱田神宮",icon:"⛩️"},{label:"蓬萊軒",icon:"🐟"},{label:"大須",icon:"🐸"},{label:"名古屋城",icon:"🏯"}],
+   timeline:[
+     {time:"08:00",end:"09:20",icon:"🍞",title:"つばめパン&Milk 名駅店　早餐",detail:"現烤厚切吐司、小倉紅豆奶油吐司、熔岩起司吐司。純現場排隊，08:00前後人潮較少。"},
+     {time:"09:30",end:"09:50",icon:"🚃",title:"名駅 → 神宮前站",detail:"名鐵名古屋本線特急/急行皆可，車程6–8分，單程240円。"},
+     {time:"10:30",end:"10:35",icon:"🎫",title:"蓬萊軒　登記領牌",detail:"10:30正式發號，登記人數取得「第一批11:30入座」號碼單。",status:"queue",statusText:"10:20抵達排入領號隊伍"},
+     {time:"10:35",end:"11:25",icon:"⛩️",title:"熱田神宮參拜 & 草薙館",detail:"本宮參拜、林蔭參道散步；草薙館名刀展，體驗手持真劍與大太刀（門票500円）。"},
+     {time:"11:30",end:"12:45",icon:"🐟",title:"蓬萊軒　第一批入座享用鰻魚飯",detail:"炭香「Hitsumabushi 鰻魚飯三吃」×2，準時第一批入座、零等候。",status:"booked",statusText:"11:30第一批入座"},
+     {time:"13:05",end:"14:50",icon:"🐸",title:"大須商店街 & 青柳總本家",detail:"參拜大須觀音寺、逛昭和風老街；青柳總本家大須本店品嚐青蛙饅頭。"},
+     {time:"15:10",end:"16:40",icon:"🏯",title:"名古屋城 & 本丸御殿",detail:"國寶級本丸御殿（門票500円，出示地鐵一日券優惠400円），16:00停止入場。"},
+     {time:"17:15",end:null,icon:"🛍️",title:"名驛採買伴手禮 & 打包行李",detail:"名驛高島屋、名鐵百貨地下街採買，回房整理次日返台行李。"}
+   ],
+   alerts:[
+     {level:"must",text:"10:30 準時在蓬萊軒門口登記，取得第一批11:30入座號碼單，切勿錯過發號時間；領牌後可安心走去熱田神宮參拜。"},
+     {level:"tip",text:"領牌到入座之間剛好50分鐘空檔，等候時間直接變成參拜神宮與草薙館的充實行程，零浪費。"},
+     {level:"note",text:"名古屋城本丸御殿16:00停止入場，出示地鐵一日券可享優惠票價。"}
+   ],
+   luggage:"大行李留置日航尚格房間內，輕裝隨身包出發。"
+  },
+  {n:8,date:"2026-09-16",weekday:"二",route:"名古屋 → 中部國際機場 → 桃園",hotel:"—",hotelNote:"返家日，無住宿",
+   mapNodes:[{label:"日航尚格",icon:"🏨"},{label:"名鐵名古屋",icon:"🚄"},{label:"NGO機場",icon:"✈️"},{label:"桃園TPE",icon:"🏠"}],
+   timeline:[
+     {time:"07:30",end:"08:30",icon:"🏨",title:"日航尚格酒店早餐 & 退房準備",detail:"享用在地特色早餐，進行隨身行李與免稅單據最後盤點。"},
+     {time:"08:35",end:"08:45",icon:"🧳",title:"辦理退房手續",detail:"櫃檯結帳退房，拉大行李箱出發。"},
+     {time:"08:45",end:"09:00",icon:"🚕",title:"日航尚格 → 名鐵名古屋站",detail:"建議飯店門口叫計程車（約3–5分，700–900円），或沿廣小路通步行約10–12分鐘。"},
+     {time:"09:20",end:"09:48",icon:"🚄",title:"μ-SKY 直達中部國際機場",detail:"全車特別車，大行李箱放入車廂專用行李架。備案：09:31 / 09:50 班次。",status:"open",statusText:"名鐵名古屋第3月台"},
+     {time:"09:50",end:"10:45",icon:"🛂",title:"第一航廈報到、托運與安檢",detail:"步行穿過交通廣場抵達3樓出境大廳，辦理華航CI0155報到、行李托運、安檢與出境審查。"},
+     {time:"10:45",end:"11:45",icon:"🛍️",title:"免稅店採購",detail:"北陸及愛知伴手禮：坂角蝦餅、赤福餅、小倉紅豆夾心餅乾。"},
+     {time:"11:50",end:"12:20",icon:"🛫",title:"登機門候機 & 起飛",detail:"CI0155 12:20 自NGO起飛，預計14:30抵達桃園TPE（飛行約3小時10分）。"}
+   ],
+   alerts:[
+     {level:"must",text:"起飛前2.5小時（09:50前）務必抵達機場報到櫃檯，保留托運、安檢與免稅購物時間。"},
+     {level:"note",text:"名鐵名古屋站往機場方向請認準第3月台（空港線），確認跑馬燈顯示「中部国際空港行」。"},
+     {level:"tip",text:"赤福餅賞味期限僅2–3天，建議機場免稅店作最後採買，避免提前買了放到過期。"}
+   ],
+   luggage:"退房後隨身攜帶大行李直奔機場，於櫃檯完成國際線托運。"
+  }
+];
+
+var REMINDERS = [
+  {level:"must",text:"YORONIKU NAGOYA（Day 6・17:00）是全程唯一需網路預約的餐廳，全套專人代烤，務必16:50前報到，遲到可能被取消席位。"},
+  {level:"must",text:"Day 1 深夜抵達後，請先至 JR 名古屋站「e5489」機台用 KKday QR code 兌換 Day 2 飛驒號車票（每人2張）。"},
+  {level:"tip",text:"三間排隊名店各有技巧：丸明（Day2）現場登記、もりもり壽司（Day5）抽號碼牌、あつた蓬萊軒（Day7）10:30定時發號 — 都不接受電話訂位。"},
+  {level:"note",text:"出發前建議兌換 JPY 80,000 現鈔（1萬円×5 + 千円×30），投幣試飲、寄物櫃、朝市小吃多僅收現金。"},
+  {level:"note",text:"上高地、白川鄉全區行李箱無法通行，行程採高山寄物 → 白川鄉人工寄放 → 金澤計程車直送的三段式行李運送。"},
+  {level:"tip",text:"買酒回台每人免稅額度5公升，須置入托運行李並妥善防撞包覆，不可隨身手提上機。"}
+];
+
+var TICKETS = [
+  {date:"9/10 (Day2)",desc:"JR特急飛驒3號　名古屋 → 高山",time:"08:43 → 10:58",seat:"7車 6C/6D"},
+  {date:"9/12 (Day4)",desc:"濃飛巴士0044便　高山 → 白川鄉",time:"12:10 → 13:00",seat:"6A/6B"},
+  {date:"9/12 (Day4)",desc:"濃飛巴士0004便　白川鄉 → 金澤西口",time:"17:30 → 18:45",seat:"10C/10D"},
+  {date:"9/14 (Day6)",desc:"北陸新幹線 Tsurugi 15　金澤 → 敦賀",time:"09:55 → 10:36",seat:"3車 11A/11B"},
+  {date:"9/14 (Day6)",desc:"特急白鷺6號　敦賀 → 名古屋",time:"11:10 → 12:48",seat:"5車 6C/6D"}
+];
+
+var LEDGER = [
+  {name:"行前固定支出",desc:"機票・4間飯店7晚・旅平險・機場接送",twd:58860,fixed:true},
+  {name:"長途大交通",desc:"飛驒3號・白川鄉雙段巴士・新幹線轉白鷺號",twd:7946,fixed:true,jpy:38760},
+  {name:"現場實體日圓現金",desc:"上高地巴士・機場μ-SKY・短程車資・門票・寄物・朝市小吃",jpy:80000,fixed:false},
+  {name:"重點名店餐飲",desc:"YORONIKU・丸明・蓬萊軒・もりもり壽司・HARBS・居酒屋",jpy:65000,fixed:false},
+  {name:"伴手禮與買酒購物",desc:"清酒・和菓子・蝦仙貝・藥妝與免稅品",jpy:45000,fixed:false},
+  {name:"彈性零星備用金",desc:"臨時飲料點心・多搭計程車・突發開銷",jpy:20000,fixed:false}
+];
+
+var SHOPPING_HTML =
+  '<p><b>飛驒高山</b>：日下部味噌／陣屋味噌、三葉草サルボボ猴寶寶、飛驒牛肉乾（認明高溫殺菌軟袋，符合入境檢疫規範）。老街酒造「舩坂酒造店」「原田酒造場」可試飲買清酒「深山菊」「山車」。</p>' +
+  '<div class="tag-row"><span class="tagchip">日下部味噌</span><span class="tagchip">Sarubobo</span><span class="tagchip">飛驒牛肉乾</span><span class="tagchip">深山菊 / 山車</span></div>' +
+  '<p style="margin-top:14px;"><b>金澤</b>：中田屋金鍔、箔一金箔保養品／吸油面紙、金澤百番街「あんと」石川名產（白蝦仙貝、潮屋炙燒鰤魚）。地酒推薦菊姬、天狗舞、鄰縣福井名酒黑龍。</p>' +
+  '<div class="tag-row"><span class="tagchip">中田屋 きんつば</span><span class="tagchip">箔一</span><span class="tagchip">あんと土産街</span><span class="tagchip">菊姬 / 天狗舞 / 黑龍</span></div>' +
+  '<p style="margin-top:14px;"><b>名古屋 & 機場</b>：坂角總本舖蝦餅、青柳總本家青蛙饅頭、小倉紅豆夾心餅乾、赤福餅（賞味僅2–3天，建議Day8機場再買）。地酒「釀し人九平次」可於高島屋地下美食街購得，機場免稅店可免稅買獺祭、久保田萬壽。</p>' +
+  '<div class="tag-row"><span class="tagchip">坂角蝦餅</span><span class="tagchip">青蛙饅頭</span><span class="tagchip">赤福餅</span><span class="tagchip">釀し人九平次</span></div>';
+
+var CASH_HTML =
+  '<p><b>日幣現金 JPY 80,000</b>（約NT$16,400）：大面額（萬円×5）用於巴士窗口購票與大額結帳；小面額（千円×30）用於投幣試飲、車站寄物櫃、朝市攤位與販賣機 — 極為重要，市場攤位多不支援外國信用卡。</p>' +
+  '<p style="margin-top:10px;"><b>新台幣現金</b>：NT$3,000隨身備用，供台灣往返機場接送小費與臨時開銷。</p>' +
+  '<p style="margin-top:10px;"><b>信用卡</b>：2–3張海外高回饋Visa/Mastercard，並準備至少1張JCB卡（日本過卡率高）；確認金融卡已開通海外提款（Cirrus/Plus）並記牢密碼；iPhone可先綁定Suica/ICOCA供Apple Pay感應付款。</p>';
+
+/* ---------- utilities ---------- */
+function pad(n){return n<10?"0"+n:""+n;}
+function ymd(d){return d.getFullYear()+"-"+pad(d.getMonth()+1)+"-"+pad(d.getDate());}
+function parseYMD(s){var p=s.split("-");return new Date(+p[0],+p[1]-1,+p[2]);}
+function fmtInt(n){return Math.round(n).toLocaleString("en-US");}
+function minutesOf(hhmm){var p=hhmm.split(":");return (+p[0])*60+(+p[1]);}
+
+var now = new Date();
+var todayYMD = ymd(now);
+var tripStartD = parseYMD(TRIP_START);
+var tripEndD = parseYMD(TRIP_END);
+var activeDay = null;
+DAYS.forEach(function(d){ if(d.date===todayYMD) activeDay = d.n; });
+var tripPhase = now < tripStartD ? "before" : (now > new Date(tripEndD.getFullYear(),tripEndD.getMonth(),tripEndD.getDate(),23,59) ? "after" : "during");
+
+/* ---------- nav / tabs ---------- */
+var VIEWS = ["overview","itinerary","budget"];
+function setView(name, skipHash){
+  VIEWS.forEach(function(v){
+    document.getElementById("view-"+v).hidden = (v!==name);
+  });
+  document.querySelectorAll(".tab").forEach(function(t){
+    t.classList.toggle("active", t.dataset.tab===name);
+  });
+  if(!skipHash){ history.replaceState(null,"","#"+name); }
+  if(name==="itinerary"){ requestAnimationFrame(drawDayMap); }
+  if(name==="overview"){ requestAnimationFrame(drawLoopMap); }
+}
+document.querySelectorAll(".tab").forEach(function(t){
+  t.addEventListener("click", function(){ setView(t.dataset.tab); });
+});
+document.getElementById("todayPill").addEventListener("click", function(){
+  if(activeDay){ setView("itinerary"); selectDay(activeDay); }
+});
+document.getElementById("heroJump").addEventListener("click", function(e){
+  e.preventDefault(); setView("itinerary"); if(activeDay) selectDay(activeDay);
+});
+document.getElementById("shareBtn").addEventListener("click", function(){
+  var btn=this; var original=btn.textContent;
+  (navigator.clipboard && navigator.clipboard.writeText(location.href).then(function(){
+    btn.textContent="✓"; setTimeout(function(){btn.textContent=original;},1400);
+  })) || (function(){btn.textContent="✓"; setTimeout(function(){btn.textContent=original;},1400);})();
+});
+
+/* ---------- hero status ---------- */
+(function initHero(){
+  var val = document.getElementById("heroStatusValue");
+  var jump = document.getElementById("heroJump");
+  var pill = document.getElementById("todayPill");
+  var box = document.getElementById("heroStatus");
+  if(tripPhase==="before"){
+    var diffDays = Math.ceil((tripStartD-now)/86400000);
+    val.textContent = "距離出發還有 " + diffDays + " 天";
+  } else if(tripPhase==="during"){
+    box.classList.add("today");
+    if(activeDay){
+      val.textContent = "今天是 Day " + activeDay + "・" + DAYS[activeDay-1].route;
+      jump.hidden = false;
+      pill.classList.add("show");
+    } else {
+      val.textContent = "旅程進行中";
+    }
+  } else {
+    val.textContent = "旅程已結束・感謝這趟中部北陸紀行";
+  }
+})();
+
+/* ---------- reminders ---------- */
+(function renderReminders(){
+  var kmap={must:"必看",tip:"小提醒",note:"備註"};
+  document.getElementById("remindersList").innerHTML = REMINDERS.map(function(r){
+    return '<div class="alert '+r.level+'"><span class="kicker">'+kmap[r.level]+'</span><p>'+r.text+'</p></div>';
+  }).join("");
+  document.getElementById("remCount").textContent = REMINDERS.length + " 則";
+})();
+
+/* ---------- tickets ---------- */
+(function renderTickets(){
+  document.getElementById("ticketBody").innerHTML = TICKETS.map(function(t){
+    return '<tr><td class="mono">'+t.date+'</td><td>'+t.desc+'</td><td class="mono">'+t.time+'</td><td class="seat">'+t.seat+'</td><td><span class="badge-ok">已購妥</span></td></tr>';
+  }).join("");
+})();
+
+document.getElementById("shoppingBody").innerHTML = SHOPPING_HTML;
+document.getElementById("cashBody").innerHTML = CASH_HTML;
+
+/* ---------- day scroller + panel ---------- */
+var currentDayIdx = activeDay || 1;
+function renderScroller(){
+  document.getElementById("dayScroller").innerHTML = DAYS.map(function(d){
+    var isToday = d.n===activeDay;
+    return '<button class="day-chip'+(d.n===currentDayIdx?' active':'')+'" data-day="'+d.n+'">' +
+      (isToday?'<span class="today-dot"></span>':'') +
+      '<div class="dn">DAY '+d.n+'</div><div class="dd">'+d.date.slice(5).replace('-','/')+' ('+d.weekday+')</div><div class="dr">'+d.route+'</div></button>';
+  }).join("");
+  document.querySelectorAll(".day-chip").forEach(function(c){
+    c.addEventListener("click", function(){ selectDay(+c.dataset.day); });
+  });
+}
+
+function timelineStatus(day, item){
+  if(day.date!==todayYMD || tripPhase!=="during") return "";
+  var nowMin = now.getHours()*60+now.getMinutes();
+  var start = minutesOf(item.time);
+  var idx = day.timeline.indexOf(item);
+  var nextStart = idx+1<day.timeline.length ? minutesOf(day.timeline[idx+1].time) : 24*60;
+  if(nowMin>=start && nowMin<nextStart) return "current";
+  if(nowMin<start){
+    var prevIdx=-1;
+    for(var j=0;j<day.timeline.length;j++){ if(minutesOf(day.timeline[j].time)<=nowMin) prevIdx=j; }
+    if(prevIdx===idx-1) return "next";
+    return "";
+  }
+  return "past";
+}
+
+function selectDay(n){
+  currentDayIdx = n;
+  var day = DAYS[n-1];
+  document.querySelectorAll(".day-chip").forEach(function(c){ c.classList.toggle("active", +c.dataset.day===n); });
+  var statusMap={booked:"已預約/已購票",queue:"現場排隊",open:"免預約"};
+  var html = '';
+  html += '<div class="day-head"><div><h2>Day '+day.n+'　'+day.route+'</h2>' +
+    '<div class="sub">'+day.date.replace(/-/g,'.')+'（週'+day.weekday+'）</div></div>' +
+    '<div class="hotel-tag"><span>🛏️</span><div><div class="h-label">今晚住宿</div><div>'+day.hotel+'</div></div></div></div>';
+
+  html += '<div class="timeline">';
+  day.timeline.forEach(function(item){
+    var st = timelineStatus(day,item);
+    html += '<div class="t-item '+st+'"><div class="t-time">'+item.time+(item.end?'<span class="end">'+item.end+'</span>':'')+'</div><div class="t-node"></div>';
+    html += '<div class="t-card"><div class="t-title-row"><div class="t-icon">'+item.icon+'</div><div class="t-title">'+item.title+'</div>';
+    if(st==="current") html += '<span class="now-flag">現在</span>';
+    if(st==="next") html += '<span class="next-flag">接下來</span>';
+    html += '</div><div class="t-detail">'+item.detail+'</div>';
+    if(item.status){ html += '<span class="status-pill '+item.status+'">'+(item.statusText||statusMap[item.status])+'</span>'; }
+    html += '</div></div>';
+  });
+  html += '</div>';
+
+  html += '<div class="luggage-note"><b>行李策略：</b>'+day.luggage+'</div>';
+
+  html += '<div class="reminders" style="margin-top:18px;">';
+  var kmap={must:"必看",tip:"小提醒",note:"備註"};
+  day.alerts.forEach(function(a){
+    html += '<div class="alert '+a.level+'"><span class="kicker">'+kmap[a.level]+'</span><p>'+a.text+'</p></div>';
+  });
+  html += '</div>';
+
+  html += '<div class="day-nav"><button id="prevDay" '+(n<=1?'disabled':'')+'>← Day '+(n-1)+'</button><button id="nextDay" '+(n>=8?'disabled':'')+'>Day '+(n+1)+' →</button></div>';
+
+  document.getElementById("dayPanel").innerHTML = html;
+  document.querySelectorAll(".day-chip.active")[0] && document.querySelectorAll(".day-chip.active")[0].scrollIntoView({block:"nearest",inline:"center",behavior:"smooth"});
+  var prevBtn=document.getElementById("prevDay"), nextBtn=document.getElementById("nextDay");
+  if(prevBtn) prevBtn.addEventListener("click", function(){ selectDay(n-1); });
+  if(nextBtn) nextBtn.addEventListener("click", function(){ selectDay(n+1); });
+  requestAnimationFrame(function(){ drawDayMap(); });
+}
+renderScroller();
+
+/* ---------- canvas: loop map (overview) ---------- */
+function cssVar(name){ return getComputedStyle(document.documentElement).getPropertyValue(name).trim(); }
+function setupCanvas(canvas){
+  var dpr = window.devicePixelRatio || 1;
+  var rect = canvas.getBoundingClientRect();
+  if(rect.width===0) return null;
+  canvas.width = Math.round(rect.width*dpr);
+  canvas.height = Math.round(rect.height*dpr);
+  var ctx = canvas.getContext("2d");
+  ctx.setTransform(dpr,0,0,dpr,0,0);
+  return {ctx:ctx, w:rect.width, h:rect.height};
+}
+
+var LOOP_STOPS = [
+  {label:"中部機場",sub:"Day1 抵達・Day8 出發",activeDays:[8],doneDay:8},
+  {label:"名古屋",sub:"Day1",activeDays:[1],doneDay:1},
+  {label:"高山",sub:"Day2・3",activeDays:[2],doneDay:2},
+  {label:"白川鄉",sub:"Day4",activeDays:[],doneDay:4},
+  {label:"金澤",sub:"Day4・5",activeDays:[4,5],doneDay:5},
+  {label:"名古屋",sub:"Day6・7",activeDays:[6,7],doneDay:7}
+];
+var SPUR_STOP = {label:"上高地",sub:"Day3 來回",activeDays:[3],doneDay:3};
+var DAY_T = {1:1/6, 2:2/6, 3:2.5/6, 4:3.5/6, 5:4/6, 6:4.5/6, 7:5/6, 8:1};
+
+function loopPoint(cx,cy,rx,ry,t){
+  var a = -Math.PI/2 + t*Math.PI*2;
+  return {x:cx+rx*Math.cos(a), y:cy+ry*Math.sin(a)};
+}
+
+function drawLoopMap(){
+  var canvas = document.getElementById("loopMap");
+  var setup = setupCanvas(canvas);
+  if(!setup) return;
+  var ctx=setup.ctx, w=setup.w, h=setup.h;
+  ctx.clearRect(0,0,w,h);
+  var compact = w < 480;
+  var cx=w/2, cy=h/2+6, rx=w*(compact?0.30:0.36), ry=h*(compact?0.30:0.34);
+  var lineCol = cssVar("--line-strong");
+  var indigo = cssVar("--indigo");
+  var vermilion = cssVar("--vermilion");
+  var gold = cssVar("--gold");
+  var ink = cssVar("--ink");
+  var inkSoft = cssVar("--ink-soft");
+  var surface = cssVar("--surface");
+
+  var n = LOOP_STOPS.length;
+  var progressT = 0;
+  if(tripPhase==="after") progressT = 1;
+  else if(tripPhase==="during" && activeDay){
+    progressT = DAY_T[activeDay] || 0;
+  }
+
+  ctx.lineWidth = 2.5;
+  ctx.setLineDash([]);
+  ctx.beginPath();
+  for(var i=0;i<=n;i++){
+    var t=i/n; var p=loopPoint(cx,cy,rx,ry,t);
+    if(i===0) ctx.moveTo(p.x,p.y); else ctx.lineTo(p.x,p.y);
+  }
+  ctx.strokeStyle = tripPhase==="after" ? gold : lineCol;
+  ctx.stroke();
+
+  if(progressT>0){
+    ctx.beginPath();
+    var steps=200;
+    for(var s=0;s<=steps*progressT;s++){
+      var t2=(s/steps); var p2=loopPoint(cx,cy,rx,ry,t2);
+      if(s===0) ctx.moveTo(p2.x,p2.y); else ctx.lineTo(p2.x,p2.y);
+    }
+    ctx.strokeStyle = vermilion;
+    ctx.lineWidth = 3;
+    ctx.stroke();
+  }
+
+  var takayamaT = 2/n;
+  var takayamaPt = loopPoint(cx,cy,rx,ry,takayamaT);
+  var spurPt = {x:takayamaPt.x, y:takayamaPt.y-ry*0.62};
+  ctx.beginPath();
+  ctx.setLineDash([4,5]);
+  ctx.moveTo(takayamaPt.x,takayamaPt.y);
+  ctx.lineTo(spurPt.x,spurPt.y);
+  ctx.strokeStyle = tripPhase==="during" && activeDay===3 ? vermilion : inkSoft;
+  ctx.lineWidth=2;
+  ctx.stroke();
+  ctx.setLineDash([]);
+
+  function drawNode(p, label, sub, isDone, isActive){
+    ctx.beginPath();
+    ctx.arc(p.x,p.y,isActive?7:5.5,0,Math.PI*2);
+    ctx.fillStyle = isActive ? vermilion : (isDone ? gold : surface);
+    ctx.fill();
+    ctx.lineWidth=2;
+    ctx.strokeStyle = isActive ? vermilion : (isDone ? gold : indigo);
+    ctx.stroke();
+    ctx.fillStyle = ink;
+    ctx.font = (compact?"700 10.5px ":"700 12px ")+"'Noto Sans TC', sans-serif";
+    ctx.textAlign = p.x>cx ? "left" : (Math.abs(p.x-cx)<4 ? "center":"right");
+    var lx = p.x + (p.x>cx? 10 : (Math.abs(p.x-cx)<4?0:-10));
+    var ly = p.y < cy ? p.y-10 : p.y+18;
+    ctx.fillText(label, lx, ly);
+    if(!compact){
+      ctx.fillStyle = inkSoft;
+      ctx.font = "500 10.5px 'JetBrains Mono', monospace";
+      ctx.fillText(sub, lx, ly + (p.y<cy?-13:14));
+    }
+  }
+
+  var liveDotPos=null, liveDotState="start";
+  LOOP_STOPS.forEach(function(stop,i){
+    var t=i/n; var p=loopPoint(cx,cy,rx,ry,t);
+    var isDone = tripPhase==="after" || (tripPhase==="during" && activeDay && activeDay>stop.doneDay);
+    var isActive = tripPhase==="during" && activeDay && stop.activeDays.indexOf(activeDay)>=0;
+    drawNode(p, stop.label, stop.sub, isDone, isActive);
+    if(isActive){ liveDotPos=p; liveDotState="live"; }
+  });
+  var spurActive = tripPhase==="during" && activeDay && SPUR_STOP.activeDays.indexOf(activeDay)>=0;
+  var spurDone = tripPhase==="after" || (tripPhase==="during" && activeDay>SPUR_STOP.doneDay);
+  drawNode(spurPt, SPUR_STOP.label, SPUR_STOP.sub, spurDone, spurActive);
+  if(spurActive){ liveDotPos=spurPt; liveDotState="live"; }
+
+  if(!liveDotPos && tripPhase==="before"){ liveDotPos = loopPoint(cx,cy,rx,ry,0); liveDotState="start"; }
+  if(!liveDotPos && tripPhase==="after"){ liveDotPos = loopPoint(cx,cy,rx,ry,0); liveDotState="done"; }
+
+  var overlay = canvas.parentElement.querySelector(".live-dot");
+  if(overlay) overlay.remove();
+  if(liveDotPos){
+    var dot = document.createElement("div");
+    dot.className = "live-dot" + (liveDotState==="start"?" start":"") + (liveDotState==="done"?" done":"");
+    dot.style.left = liveDotPos.x+"px";
+    dot.style.top = liveDotPos.y+"px";
+    canvas.parentElement.appendChild(dot);
+  }
+}
+
+function drawDayMap(){
+  var canvas = document.getElementById("dayMap");
+  var setup = setupCanvas(canvas);
+  if(!setup) return;
+  var ctx=setup.ctx, w=setup.w, h=setup.h;
+  ctx.clearRect(0,0,w,h);
+  var day = DAYS[currentDayIdx-1];
+  var nodes = day.mapNodes;
+  var padX = w<380?30:44;
+  var y = h/2;
+  var indigo = cssVar("--indigo"), ink=cssVar("--ink"), inkSoft=cssVar("--ink-soft"), surface=cssVar("--surface"), vermilion=cssVar("--vermilion");
+
+  ctx.beginPath();
+  ctx.moveTo(padX,y); ctx.lineTo(w-padX,y);
+  ctx.strokeStyle = cssVar("--line-strong");
+  ctx.lineWidth=2;
+  ctx.stroke();
+
+  nodes.forEach(function(node,i){
+    var x = padX + (w-padX*2) * (i/(nodes.length-1||1));
+    ctx.beginPath();
+    ctx.arc(x,y,5,0,Math.PI*2);
+    ctx.fillStyle = surface;
+    ctx.strokeStyle = i===0||i===nodes.length-1 ? vermilion : indigo;
+    ctx.lineWidth=2.5;
+    ctx.fill(); ctx.stroke();
+
+    ctx.font = (w<380?"18px ":"22px ")+"sans-serif";
+    ctx.textAlign="center";
+    ctx.fillText(node.icon, x, y-18);
+
+    ctx.font = "600 "+(w<380?"10px ":"11.5px ")+"'Noto Sans TC', sans-serif";
+    ctx.fillStyle = ink;
+    ctx.fillText(node.label, x, y+24);
+  });
+}
+
+window.addEventListener("resize", debounce(function(){
+  drawLoopMap(); drawDayMap();
+}, 150));
+function debounce(fn,ms){ var t; return function(){ clearTimeout(t); var a=arguments; t=setTimeout(function(){fn.apply(null,a);},ms); }; }
+if(window.matchMedia){
+  window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", function(){ drawLoopMap(); drawDayMap(); });
+}
+
+/* ---------- budget + live FX ---------- */
+var fxInput = document.getElementById("fxInput");
+var fxMeta = document.getElementById("fxMeta");
+var fxRefreshBtn = document.getElementById("fxRefresh");
+var fxRefreshIcon = document.getElementById("fxRefreshIcon");
+var manualOverride = false;
+
+function fmtTime(iso){
+  try{
+    var d = iso ? new Date(iso) : new Date();
+    if(isNaN(d.getTime())) d = new Date();
+    return d.toLocaleString("zh-TW",{month:"numeric",day:"numeric",hour:"2-digit",minute:"2-digit"});
+  }catch(e){ return ""; }
+}
+
+function applyRate(rate, tsIso, source){
+  fxInput.value = Math.round(rate*10000)/10000;
+  manualOverride = false;
+  fxMeta.className = "fx-meta live";
+  fxMeta.textContent = "即時匯率・來源 "+source+"・更新於 "+fmtTime(tsIso);
+  try{ localStorage.setItem(FX_CACHE_KEY, JSON.stringify({rate:rate, ts:tsIso, source:source})); }catch(e){}
+  computeBudget();
+}
+
+function setLoading(on){
+  fxRefreshBtn.disabled = on;
+  fxRefreshIcon.textContent = on ? "" : "↻";
+  if(on){
+    var s=document.createElement("span"); s.className="spin";
+    fxRefreshIcon.appendChild(s);
+  }
+}
+
+function fetchRate(){
+  setLoading(true);
+  fxMeta.className = "fx-meta";
+  fxMeta.textContent = "正在取得即時匯率…";
+  fetch("https://open.er-api.com/v6/latest/JPY", {cache:"no-store"})
+    .then(function(r){ if(!r.ok) throw new Error("bad status"); return r.json(); })
+    .then(function(j){
+      if(j.result!=="success" || !j.rates || !j.rates.TWD) throw new Error("no TWD");
+      applyRate(j.rates.TWD, j.time_last_update_utc, "open.er-api.com");
+      setLoading(false);
+    })
+    .catch(function(){
+      fetch("https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@latest/v1/currencies/jpy/twd.json", {cache:"no-store"})
+        .then(function(r){ if(!r.ok) throw new Error("bad status"); return r.json(); })
+        .then(function(j){
+          if(!j.twd) throw new Error("no twd");
+          applyRate(j.twd, j.date, "currency-api");
+          setLoading(false);
+        })
+        .catch(function(){
+          setLoading(false);
+          var cached = null;
+          try{ cached = JSON.parse(localStorage.getItem(FX_CACHE_KEY)); }catch(e){}
+          if(cached && cached.rate){
+            fxInput.value = cached.rate;
+            fxMeta.className = "fx-meta err";
+            fxMeta.textContent = "無法連線即時匯率，顯示上次快取值（"+fmtTime(cached.ts)+"）— 請手動確認";
+          } else {
+            fxInput.value = FX_DEFAULT;
+            fxMeta.className = "fx-meta err";
+            fxMeta.textContent = "無法連線即時匯率，暫以參考值顯示 — 請手動輸入實際匯率";
+          }
+          computeBudget();
+        });
+    });
+}
+fxRefreshBtn.addEventListener("click", fetchRate);
+
+function computeBudget(){
+  var rate = parseFloat(fxInput.value) || FX_DEFAULT;
+  var fixedTotal = 0, floatingJpyTotal = 0;
+  LEDGER.forEach(function(row){
+    if(row.fixed){ fixedTotal += row.twd; }
+    else { floatingJpyTotal += row.jpy; }
+  });
+  var floatingTwd = floatingJpyTotal * rate;
+  var total = fixedTotal + floatingTwd;
+  var planTotal = fixedTotal + floatingJpyTotal * FX_PLAN;
+
+  document.getElementById("totalTwd").textContent = "NT$ " + fmtInt(total);
+  document.getElementById("totalSub").textContent = "已付款 NT$"+fmtInt(fixedTotal)+" ＋ 現場預估 JPY "+fmtInt(floatingJpyTotal)+" × "+rate.toFixed(4);
+  document.getElementById("perPerson").textContent = "NT$ " + fmtInt(total/2) + " / 人";
+  document.getElementById("statBudget").textContent = fmtInt(total);
+
+  var diff = total - planTotal;
+  var chip = document.getElementById("deltaChip");
+  if(Math.abs(diff) < 5){ chip.className="delta flat"; chip.textContent="與原始編列相符"; }
+  else if(diff < 0){ chip.className="delta save"; chip.textContent="比原編列省下 NT$"+fmtInt(-diff); }
+  else { chip.className="delta over"; chip.textContent="比原編列多出 NT$"+fmtInt(diff); }
+
+  document.getElementById("ledger").innerHTML = LEDGER.map(function(row){
+    var twd = row.fixed ? row.twd : row.jpy*rate;
+    var pct = Math.min(100, (twd/total)*100);
+    return '<div class="lrow '+(row.fixed?'fixed':'floating')+'">' +
+      '<div class="lrow-top"><div><div class="lrow-name">'+row.name+'</div><div class="lrow-desc">'+row.desc+'</div>' +
+      '<div class="lrow-tags"><span class="status-pill '+(row.fixed?'booked':'queue')+'">'+(row.fixed?'已付款':'即時匯率換算')+'</span></div></div>' +
+      '<div class="lrow-amt">'+(row.jpy?'<div class="lrow-jpy">JPY '+fmtInt(row.jpy)+'</div>':'')+'<div class="lrow-twd">NT$ '+fmtInt(twd)+'</div></div></div>' +
+      '<div class="lrow-bar"><span style="width:'+pct+'%"></span></div></div>';
+  }).join("");
+}
+fxInput.addEventListener("input", function(){
+  manualOverride = true;
+  fxMeta.className = "fx-meta";
+  fxMeta.textContent = "手動輸入匯率（未連線即時來源）";
+  computeBudget();
+});
+
+(function initFx(){
+  var cached = null;
+  try{ cached = JSON.parse(localStorage.getItem(FX_CACHE_KEY)); }catch(e){}
+  fxInput.value = (cached && cached.rate) ? cached.rate : FX_DEFAULT;
+  computeBudget();
+  fetchRate();
+})();
+
+/* ---------- routing / init ---------- */
+function applyHash(){
+  var h = location.hash.replace("#","").split("/");
+  var view = VIEWS.indexOf(h[0])>=0 ? h[0] : "overview";
+  setView(view, true);
+  if(view==="itinerary" && h[1]){ selectDay(+h[1]); } else { selectDay(currentDayIdx); }
+}
+window.addEventListener("hashchange", applyHash);
+applyHash();
+drawLoopMap();
+
+})();
+</script>
+</body>
+</html>
