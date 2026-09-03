@@ -1056,8 +1056,10 @@ function drawLoopMap(){
   }
   loopMapLayer.clearLayers();
 
-  L.polyline(ROUTE_PATH, {color:cssVar("--line-strong"), weight:3, opacity:.9}).addTo(loopMapLayer);
-  L.polyline([LOOP_STOPS[2].c, SPUR_STOP.c], {color:cssVar("--ink-soft"), weight:2, dashArray:"5,6"}).addTo(loopMapLayer);
+  L.polyline(ROUTE_PATH, {color:cssVar("--paper"), weight:7, opacity:.85, lineCap:"round", lineJoin:"round"}).addTo(loopMapLayer);
+  L.polyline(ROUTE_PATH, {color:cssVar("--ink"), weight:3.5, opacity:1, lineCap:"round", lineJoin:"round"}).addTo(loopMapLayer);
+  L.polyline([LOOP_STOPS[2].c, SPUR_STOP.c], {color:cssVar("--paper"), weight:5.5, opacity:.85, lineCap:"round"}).addTo(loopMapLayer);
+  L.polyline([LOOP_STOPS[2].c, SPUR_STOP.c], {color:cssVar("--vermilion"), weight:2.5, opacity:1, dashArray:"1,7", lineCap:"round"}).addTo(loopMapLayer);
 
   LOOP_STOPS.concat([SPUR_STOP]).forEach(function(stop){
     var state = stopState(stop);
@@ -1086,7 +1088,8 @@ function drawDayMap(){
   var nodes = day.mapNodes;
   var coords = nodes.map(function(n){ return n.c; });
 
-  L.polyline(coords, {color:cssVar("--line-strong"), weight:3, opacity:.9}).addTo(dayMapLayer);
+  L.polyline(coords, {color:cssVar("--paper"), weight:6.5, opacity:.85, lineCap:"round", lineJoin:"round"}).addTo(dayMapLayer);
+  L.polyline(coords, {color:cssVar("--ink"), weight:3, opacity:1, lineCap:"round", lineJoin:"round"}).addTo(dayMapLayer);
   nodes.forEach(function(node,i){
     var state = (i===0 || i===nodes.length-1) ? "active" : "plain";
     L.marker(node.c, {icon: makeEmojiPin(node.icon, state, 28)})
