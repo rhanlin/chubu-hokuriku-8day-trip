@@ -1773,7 +1773,11 @@ function applyParsed(text){
 var GEMINI_KEY_KEY = "jp_chubu_trip_gemini_key";
 var GEMINI_MODEL_KEY = "jp_chubu_trip_gemini_model";
 /* model names get retired periodically; try current ones in order and remember what worked */
-var MODEL_FALLBACKS = ["gemini-3.6-flash","gemini-3.8-flash","gemini-3.7-flash","gemini-3.5-flash","gemini-2.5-flash"];
+/* flash-lite first: built for short, simple extraction tasks like a receipt, so it should
+   answer fastest; fall back to full flash models (better at messy/handwritten receipts),
+   then previous-generation flash. gemini-2.5-pro goes dead last on purpose: it's a "thinking"
+   reasoning model, not built for latency, and only useful if every faster model is unavailable. */
+var MODEL_FALLBACKS = ["gemini-3.1-flash-lite","gemini-3.5-flash","gemini-3.6-flash","gemini-3.8-flash","gemini-3.7-flash","gemini-2.5-flash","gemini-2.5-pro"];
 var geminiKey = "";
 var geminiModel = "";
 try{ geminiKey = localStorage.getItem(GEMINI_KEY_KEY) || ""; }catch(e){}
@@ -1894,8 +1898,28 @@ function modelsToTry(){
   return list;
 }
 
+/* err.isTimeout is set explicitly below rather than sniffed from err.message text --
+   the message gets translated to Chinese for display, so keyword-matching on it in
+   isModelUnavailable would silently stop working the moment the wording changes. */
 function isModelUnavailable(err){
+  if(err && err.isTimeout) return true;
   return /model|not found|not available|unsupported|404/i.test(String(err && err.message || ""));
+}
+
+var CALL_TIMEOUT_MS = 15000;
+function fetchWithTimeout(url, opts){
+  var ctrl = new AbortController();
+  var timer = setTimeout(function(){ ctrl.abort(); }, CALL_TIMEOUT_MS);
+  var merged = {}; for(var k in opts){ merged[k] = opts[k]; }
+  merged.signal = ctrl.signal;
+  return fetch(url, merged).catch(function(err){
+    if(err && err.name === "AbortError"){
+      var e = new Error("逾時（超過 "+(CALL_TIMEOUT_MS/1000)+" 秒沒回應）");
+      e.isTimeout = true;
+      throw e;
+    }
+    throw err;
+  }).finally(function(){ clearTimeout(timer); });
 }
 
 /* thinking is the main latency cost on 3.x models; "low" is their minimum.
@@ -1917,7 +1941,7 @@ function callGemini(model, b64, useThinkingLevel){
     contents:[{parts:[{text:RECEIPT_PROMPT},{inline_data:{mime_type:"image/jpeg", data:b64}}]}],
     generationConfig: gc
   };
-  return fetch("https://generativelanguage.googleapis.com/v1beta/models/"+encodeURIComponent(model)+":generateContent", {
+  return fetchWithTimeout("https://generativelanguage.googleapis.com/v1beta/models/"+encodeURIComponent(model)+":generateContent", {
     method:"POST",
     headers:{"content-type":"application/json","x-goog-api-key":geminiKey},
     body:JSON.stringify(body)
@@ -1939,10 +1963,12 @@ function callGemini(model, b64, useThinkingLevel){
   });
 }
 
+var currentScanLabel = "";
 function scanReceipt(b64){
   var list = modelsToTry(), lastErr = null;
   function attempt(i){
     if(i >= list.length) return Promise.reject(lastErr || new Error("沒有可用的模型"));
+    currentScanLabel = "正在用 "+list[i]+" 辨識";
     return callGemini(list[i], b64).then(function(r){
       if(list[i] !== geminiModel){
         geminiModel = list[i];
@@ -1953,7 +1979,7 @@ function scanReceipt(b64){
     }, function(err){
       lastErr = err;
       if(isModelUnavailable(err) && i+1 < list.length){
-        setScanStatus("模型 "+list[i]+" 不可用，改試 "+list[i+1]+"…", true);
+        setScanStatus(list[i]+" 沒有回應（"+err.message+"），改試 "+list[i+1]+"…", true);
         return attempt(i+1);
       }
       throw err;
@@ -2020,14 +2046,14 @@ camInput.addEventListener("change", function(){
   camInput.value = "";
   if(!f) return;
   scanResult.hidden = true;
+  currentScanLabel = "處理照片";
   setScanStatus("處理照片…", true);
   var t0 = Date.now();
   var ticker = setInterval(function(){
-    setScanStatus("辨識收據中…（"+Math.round((Date.now()-t0)/1000)+"s，通常 3–8 秒）", true);
+    setScanStatus(currentScanLabel+"…（"+Math.round((Date.now()-t0)/1000)+"s，最多等 "+(CALL_TIMEOUT_MS/1000)+"s／次，逾時會自動換模型）", true);
   }, 1000);
   /* 1024px is plenty for a receipt's printed text and uploads/processes noticeably faster than 1280px */
   compressImage(f, 1024, 0.75).then(function(b64){
-    setScanStatus("辨識收據中…", true);
     return scanReceipt(b64);
   }).then(function(r){
     clearInterval(ticker);
