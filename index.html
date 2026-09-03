@@ -359,15 +359,101 @@ details.acc .acc-body{padding:0 16px 16px;font-size:13.5px;color:var(--ink-soft)
 .lrow-tags{margin-top:8px;margin-left:16px;}
 .lrow-label{font-size:10px;font-weight:600;color:var(--ink-faint);margin-left:5px;text-transform:uppercase;letter-spacing:.03em;}
 .lrow-actual{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:10px;margin-left:16px;flex-wrap:wrap;}
-.lrow-actual-label{display:flex;align-items:center;gap:5px;font-size:12.5px;color:var(--ink-soft);}
-.lrow-actual-cur{font-family:var(--font-mono);}
-.actual-input{
-  width:84px;font-family:var(--font-mono);font-size:13px;font-weight:700;color:var(--ink);
-  border:none;border-bottom:1.5px dashed var(--line-strong);background:transparent;padding:2px 2px;
-}
-.actual-input:focus-visible{outline:none;border-bottom-color:var(--vermilion);}
+.lrow-actual-label{font-size:12px;color:var(--ink-faint);}
 .lrow-remain{font-family:var(--font-mono);font-size:12px;font-weight:700;color:var(--ink-soft);}
 .lrow-remain.over{color:var(--vermilion);}
+
+/* ---- quick expense logging ---- */
+.log-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:16px 16px 14px;animation:rise .5s ease both;}
+.log-row{display:flex;align-items:center;gap:10px;}
+.cur-toggle{display:flex;background:var(--surface-sunk);border-radius:10px;padding:3px;flex-shrink:0;}
+.cur-btn{
+  border:none;background:transparent;color:var(--ink-soft);cursor:pointer;
+  font-family:var(--font-mono);font-weight:700;font-size:13px;padding:8px 11px;border-radius:8px;
+  transition:background .18s,color .18s;min-width:44px;
+}
+.cur-btn.active{background:var(--surface);color:var(--vermilion);box-shadow:var(--shadow);}
+.cur-btn:focus-visible{outline:2px solid var(--vermilion);outline-offset:1px;}
+.log-amount{
+  flex:1;min-width:0;font-family:var(--font-mono);font-weight:700;font-size:30px;color:var(--ink);
+  border:none;border-bottom:2px solid var(--line);background:transparent;padding:2px 0 4px;
+  transition:border-color .2s;
+}
+.log-amount::placeholder{color:var(--line-strong);}
+.log-amount:focus{outline:none;border-bottom-color:var(--vermilion);}
+.log-amount::-webkit-outer-spin-button,.log-amount::-webkit-inner-spin-button{-webkit-appearance:none;margin:0;}
+.mic-btn{
+  flex-shrink:0;width:44px;height:44px;border-radius:50%;cursor:pointer;font-size:18px;
+  border:1px solid var(--line-strong);background:var(--surface);transition:background .2s,border-color .2s,transform .2s;
+}
+.mic-btn:hover{border-color:var(--vermilion);}
+.mic-btn.listening{background:var(--vermilion);border-color:var(--vermilion);animation:micPulse 1.2s ease-in-out infinite;}
+@keyframes micPulse{0%,100%{box-shadow:0 0 0 0 color-mix(in srgb, var(--vermilion) 45%, transparent);}50%{box-shadow:0 0 0 9px color-mix(in srgb, var(--vermilion) 0%, transparent);}}
+.log-convert{font-family:var(--font-mono);font-size:12.5px;color:var(--ink-faint);margin-top:7px;min-height:18px;transition:color .2s;}
+.log-convert.ready{color:var(--vermilion);font-weight:700;}
+.cat-chips{display:flex;gap:7px;margin-top:13px;flex-wrap:wrap;}
+.cat-chip{
+  flex:1 1 auto;min-width:74px;border:1.5px solid var(--line);background:var(--surface);color:var(--ink-soft);
+  border-radius:10px;padding:9px 6px;font-size:12.5px;font-weight:600;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;gap:6px;
+  transition:border-color .18s,color .18s,background .18s,transform .18s;
+}
+.cat-chip .cc-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+.cat-chip.active{border-color:var(--ink);background:var(--ink);color:var(--paper);}
+.cat-chip:focus-visible{outline:2px solid var(--vermilion);outline-offset:1px;}
+.log-note{
+  width:100%;margin-top:11px;font-size:13.5px;color:var(--ink);
+  border:1px solid var(--line);border-radius:10px;background:var(--paper);padding:10px 12px;
+  transition:border-color .2s;
+}
+.log-note::placeholder{color:var(--ink-faint);}
+.log-note:focus{outline:none;border-color:var(--vermilion);}
+.log-save{
+  width:100%;margin-top:11px;border:none;border-radius:10px;cursor:pointer;
+  background:var(--vermilion);color:#fff;font-size:15px;font-weight:700;padding:13px;
+  transition:transform .16s cubic-bezier(.22,.9,.32,1),opacity .2s;
+}
+.log-save:active{transform:scale(.975);}
+.log-save:disabled{opacity:.45;cursor:default;}
+.log-save:focus-visible{outline:2px solid var(--ink);outline-offset:2px;}
+.log-hint{font-size:11.5px;color:var(--ink-faint);margin-top:9px;line-height:1.5;}
+
+.log-list{display:flex;flex-direction:column;gap:1px;background:var(--line);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);}
+.log-empty{background:var(--surface);padding:22px 16px;text-align:center;font-size:13px;color:var(--ink-faint);line-height:1.6;}
+.log-day{background:var(--surface-sunk);padding:7px 14px;display:flex;justify-content:space-between;align-items:baseline;gap:10px;}
+.log-day-label{font-size:11.5px;font-weight:700;color:var(--ink-soft);}
+.log-day-sum{font-family:var(--font-mono);font-size:11.5px;color:var(--ink-faint);}
+.log-item{background:var(--surface);padding:11px 14px;display:flex;align-items:center;gap:10px;animation:logIn .35s cubic-bezier(.22,.9,.32,1) both;}
+@keyframes logIn{from{opacity:0;transform:translateY(-6px);}to{opacity:1;transform:translateY(0);}}
+.log-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0;}
+.log-main{flex:1;min-width:0;}
+.log-cat{font-size:13.5px;font-weight:600;color:var(--ink);}
+.log-note-text{font-weight:400;color:var(--ink-soft);}
+.log-time{font-family:var(--font-mono);font-size:11px;color:var(--ink-faint);margin-top:2px;}
+.log-amt{text-align:right;flex-shrink:0;}
+.log-amt-main{font-family:var(--font-mono);font-weight:700;font-size:14px;color:var(--ink);}
+.log-amt-sub{font-family:var(--font-mono);font-size:11px;color:var(--ink-faint);margin-top:1px;}
+.log-del{
+  flex-shrink:0;width:28px;height:28px;border-radius:50%;border:none;background:transparent;
+  color:var(--ink-faint);font-size:17px;line-height:1;cursor:pointer;transition:background .18s,color .18s;
+}
+.log-del:hover{background:var(--vermilion-soft);color:var(--vermilion);}
+.log-tools{display:flex;align-items:center;gap:12px;margin-top:11px;flex-wrap:wrap;}
+.log-export{
+  border:1px solid var(--line-strong);background:var(--surface);color:var(--ink-soft);
+  border-radius:999px;padding:7px 14px;font-size:12px;font-weight:600;cursor:pointer;transition:color .18s,border-color .18s;
+}
+.log-export:hover{color:var(--vermilion);border-color:var(--vermilion);}
+.log-store-note{flex:1;min-width:180px;font-size:11px;color:var(--ink-faint);line-height:1.5;}
+
+.toast{
+  position:fixed;left:50%;bottom:26px;transform:translateX(-50%);z-index:80;
+  background:var(--ink);color:var(--paper);border-radius:999px;padding:11px 18px;
+  font-size:13px;font-weight:600;box-shadow:var(--shadow);
+  display:flex;align-items:center;gap:12px;animation:toastIn .3s cubic-bezier(.22,.9,.32,1) both;
+}
+@keyframes toastIn{from{opacity:0;transform:translate(-50%,14px);}to{opacity:1;transform:translate(-50%,0);}}
+.toast button{border:none;background:transparent;color:var(--vermilion);font-weight:700;font-size:13px;cursor:pointer;padding:0;}
 
 .chart-card{
   display:flex;gap:24px;align-items:center;flex-wrap:wrap;
@@ -517,7 +603,49 @@ footer{max-width:920px;margin:60px auto 0;padding:20px 20px 40px;text-align:cent
   </section>
 
   <section id="view-budget" hidden>
-    <div class="section-head" style="margin-top:0;"><h2>即時匯率換算</h2></div>
+    <div class="section-head" style="margin-top:0;"><h2>記一筆</h2><span class="count" id="logTodaySum"></span></div>
+    <div class="log-card">
+      <div class="log-row">
+        <div class="cur-toggle" id="curToggle">
+          <button type="button" class="cur-btn active" data-cur="JPY">¥</button>
+          <button type="button" class="cur-btn" data-cur="TWD">NT$</button>
+        </div>
+        <input class="log-amount mono" id="logAmount" type="number" inputmode="decimal" step="1" min="0" placeholder="0" aria-label="金額">
+        <button class="mic-btn" id="micBtn" hidden aria-label="語音輸入">🎤</button>
+      </div>
+      <div class="log-convert" id="logConvert">輸入金額後自動換算</div>
+      <div class="cat-chips" id="catChips"></div>
+      <input class="log-note" id="logNote" type="text" placeholder="備註（選填）" aria-label="備註">
+      <button class="log-save" id="logSave">記一筆</button>
+      <div class="log-hint" id="logHint"></div>
+    </div>
+
+    <div class="total-card">
+      <div>
+        <div class="tl">雙人預估總花費</div>
+        <div class="tv mono" id="totalTwd">NT$ —</div>
+        <div class="total-sub">已花 <span class="mono" id="spentNum">NT$ 0</span> ・ 剩餘可花 <span class="mono" id="remainNum">NT$ 0</span></div>
+      </div>
+      <div class="delta flat" id="deltaChip">—</div>
+    </div>
+    <div class="per-person">平均每人約 <b class="mono" id="perPerson">—</b></div>
+
+    <div class="section-head"><h2>記帳明細</h2><span class="count" id="logCount"></span></div>
+    <div class="log-list" id="logList"></div>
+    <div class="log-tools">
+      <button class="log-export" id="logExport">複製全部明細</button>
+      <span class="log-store-note">記錄存在這台裝置的瀏覽器，清除瀏覽資料會消失，建議偶爾複製備份。</span>
+    </div>
+
+    <div class="section-head"><h2>費用結構</h2><span class="count">預算佔比依目前匯率即時計算</span></div>
+    <div class="chart-card">
+      <svg id="budgetPie" viewBox="0 0 200 200" role="img" aria-label="六大類支出佔總花費比例的圓餅圖"></svg>
+      <ul class="chart-legend" id="chartLegend"></ul>
+    </div>
+    <div class="chart-tooltip" id="chartTooltip" hidden></div>
+    <div class="ledger" id="ledger"></div>
+
+    <div class="section-head"><h2>匯率設定</h2></div>
     <div class="fx-card">
       <div class="fx-row">
         <span class="fx-eq">1 JPY =</span>
@@ -526,26 +654,8 @@ footer{max-width:920px;margin:60px auto 0;padding:20px 20px 40px;text-align:cent
         <button class="fx-refresh" id="fxRefresh"><span id="fxRefreshIcon">↻</span> 重新整理匯率</button>
       </div>
       <div class="fx-meta" id="fxMeta">正在取得即時匯率…</div>
-      <div class="fx-note">下方所有「尚未發生」的日圓金額會依此匯率即時重新計算；你也可以手動輸入銀行/刷卡實際匯率覆蓋。原始預算編列採用 1 JPY ≈ 0.205 TWD 作為對照基準。</div>
+      <div class="fx-note">記帳時輸入的日圓會用「當下這個匯率」換算並固定下來，之後匯率變動不會改動已記錄的金額；尚未發生的預算金額則一律依目前匯率即時重算。原始編列基準為 1 JPY ≈ 0.205 TWD。</div>
     </div>
-
-    <div class="total-card">
-      <div>
-        <div class="tl">雙人預估總花費</div>
-        <div class="tv mono" id="totalTwd">NT$ —</div>
-        <div class="total-sub" id="totalSub"></div>
-      </div>
-      <div class="delta flat" id="deltaChip">—</div>
-    </div>
-    <div class="per-person">平均每人約 <b class="mono" id="perPerson">—</b></div>
-
-    <div class="section-head"><h2>費用結構</h2><span class="count">佔比依目前匯率即時計算</span></div>
-    <div class="chart-card">
-      <svg id="budgetPie" viewBox="0 0 200 200" role="img" aria-label="六大類支出佔總花費比例的圓餅圖"></svg>
-      <ul class="chart-legend" id="chartLegend"></ul>
-    </div>
-    <div class="chart-tooltip" id="chartTooltip" hidden></div>
-    <div class="ledger" id="ledger"></div>
 
     <div class="section-head"><h2>攜帶資金與支付方式</h2></div>
     <details class="acc" open>
@@ -575,6 +685,8 @@ footer{max-width:920px;margin:60px auto 0;padding:20px 20px 40px;text-align:cent
   </section>
 
 </main>
+
+<div class="toast" id="toast" hidden><span id="toastText"></span><button id="toastAction" hidden></button></div>
 
 <footer>資料整理自個人行程筆記，僅供本次旅行參考使用 · 匯率由公開匯率 API 即時取得，實際支出以現場刷卡 / 兌換為準</footer>
 
@@ -753,10 +865,10 @@ var TICKETS = [
 var LEDGER = [
   {name:"行前固定支出",desc:"機票・4間飯店7晚・旅平險・機場接送",twd:58860,fixed:true},
   {name:"長途大交通",desc:"飛驒3號・白川鄉雙段巴士・新幹線轉白鷺號",twd:7946,fixed:true,jpy:38760},
-  {name:"現場實體日圓現金",desc:"上高地巴士・機場μ-SKY・短程車資・門票・寄物・朝市小吃",jpy:80000,fixed:false},
-  {name:"重點名店餐飲",desc:"YORONIKU・丸明・蓬萊軒・もりもり壽司・HARBS・居酒屋",jpy:65000,fixed:false},
-  {name:"伴手禮與買酒購物",desc:"清酒・和菓子・蝦仙貝・藥妝與免稅品",jpy:45000,fixed:false},
-  {name:"彈性零星備用金",desc:"臨時飲料點心・多搭計程車・突發開銷",jpy:20000,fixed:false}
+  {name:"現場實體日圓現金",short:"交通門票",desc:"上高地巴士・機場μ-SKY・短程車資・門票・寄物・朝市小吃",jpy:80000,fixed:false},
+  {name:"重點名店餐飲",short:"餐飲",desc:"YORONIKU・丸明・蓬萊軒・もりもり壽司・HARBS・居酒屋",jpy:65000,fixed:false},
+  {name:"伴手禮與買酒購物",short:"購物",desc:"清酒・和菓子・蝦仙貝・藥妝與免稅品",jpy:45000,fixed:false},
+  {name:"彈性零星備用金",short:"零星",desc:"臨時飲料點心・多搭計程車・突發開銷",jpy:20000,fixed:false}
 ];
 
 var SHOPPING_HTML =
@@ -1132,8 +1244,31 @@ var fxRefreshBtn = document.getElementById("fxRefresh");
 var fxRefreshIcon = document.getElementById("fxRefreshIcon");
 var manualOverride = false;
 var ACTUAL_KEY = "jp_chubu_trip_actual_spend";
-var actualSpend = {};
-try{ actualSpend = JSON.parse(localStorage.getItem(ACTUAL_KEY)) || {}; }catch(e){ actualSpend = {}; }
+var EXPENSE_KEY = "jp_chubu_trip_expenses_v1";
+var LOGPREF_KEY = "jp_chubu_trip_logpref";
+var expenses = [];
+try{ expenses = JSON.parse(localStorage.getItem(EXPENSE_KEY)) || []; }catch(e){ expenses = []; }
+function saveExpenses(){ try{ localStorage.setItem(EXPENSE_KEY, JSON.stringify(expenses)); }catch(e){} }
+
+/* carry over the earlier per-category totals as one entry each, then retire that key */
+(function migrateOldTotals(){
+  if(expenses.length) return;
+  var old = null;
+  try{ old = JSON.parse(localStorage.getItem(ACTUAL_KEY)); }catch(e){}
+  if(!old) return;
+  Object.keys(old).forEach(function(k){
+    var v = parseFloat(old[k]) || 0;
+    if(v > 0) expenses.push({id:"m"+k, ts:new Date().toISOString(), cat:+k, amt:v, cur:"TWD", twd:v, rate:1, note:"先前記錄的小計"});
+  });
+  if(expenses.length){ saveExpenses(); }
+  try{ localStorage.removeItem(ACTUAL_KEY); }catch(e){}
+})();
+
+function actualForCat(i){
+  var s = 0;
+  expenses.forEach(function(e){ if(e.cat===i) s += e.twd; });
+  return s;
+}
 
 function reducedMotion(){ return window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches; }
 var _numState = {};
@@ -1223,7 +1358,11 @@ function polarPt(cx,cy,r,angleDeg){
   return {x:cx+r*Math.cos(a), y:cy+r*Math.sin(a)};
 }
 
+var _pieSig = "";
 function renderPie(rows, total){
+  var sig = rows.map(function(r){ return Math.round(r.twd); }).join("|");
+  if(sig === _pieSig) return;
+  _pieSig = sig;
   var cx=100, cy=100, r=90, cum=0;
   var paths="", legendHtml="";
   rows.forEach(function(row,i){
@@ -1269,12 +1408,14 @@ function computeBudget(){
   var total = fixedTotal + floatingTwd;
   var planTotal = fixedTotal + floatingJpyTotal * FX_PLAN;
   var actualFloatingTotal = 0;
-  LEDGER.forEach(function(row,i){ if(!row.fixed){ actualFloatingTotal += (actualSpend[i]||0); } });
+  LEDGER.forEach(function(row,i){ if(!row.fixed){ actualFloatingTotal += actualForCat(i); } });
   var spentSoFar = fixedTotal + actualFloatingTotal;
   var remainingFloating = floatingTwd - actualFloatingTotal;
 
   animateNumber("totalTwd", total, "NT$ ");
-  document.getElementById("totalSub").textContent = "已花 NT$"+fmtInt(spentSoFar)+" ・ 剩餘可花 NT$"+fmtInt(remainingFloating);
+  animateNumber("spentNum", spentSoFar, "NT$ ");
+  animateNumber("remainNum", remainingFloating, "NT$ ");
+  document.getElementById("remainNum").style.color = remainingFloating < 0 ? "var(--vermilion)" : "";
   document.getElementById("perPerson").textContent = "NT$ " + fmtInt(total/2) + " / 人";
   animateNumber("statBudget", total, "");
 
@@ -1298,14 +1439,17 @@ function computeBudget(){
         '<div class="lrow-amt">'+(row.jpy?'<div class="lrow-jpy">JPY '+fmtInt(row.jpy)+'</div>':'')+'<div class="lrow-twd">NT$ '+fmtInt(row.twd)+'</div></div></div>' +
       '</div>';
     }
-    var actual = actualSpend[i]||0;
+    var actual = actualForCat(i);
     var over = actual > row.twd;
-    var barPct = row.twd>0 ? Math.min(100,(actual/row.twd)*100) : 0;
+    var usedPct = row.twd>0 ? Math.round(actual/row.twd*100) : 0;
+    var barPct = Math.min(100, usedPct);
+    var count = 0;
+    expenses.forEach(function(e){ if(e.cat===i) count++; });
     return '<div class="lrow floating" data-idx="'+i+'">' +
       '<div class="lrow-top"><div><div class="lrow-name">'+dot+row.name+'</div><div class="lrow-desc">'+row.desc+'</div>' +
-      '<div class="lrow-tags"><span class="status-pill queue">即時匯率換算</span></div></div>' +
-      '<div class="lrow-amt"><div class="lrow-jpy">JPY '+fmtInt(row.jpy)+'</div><div class="lrow-twd">NT$ '+fmtInt(row.twd)+'<span class="lrow-label">預計</span></div></div></div>' +
-      '<div class="lrow-actual"><label class="lrow-actual-label">已花<span class="lrow-actual-cur">NT$</span><input type="number" class="actual-input" data-idx="'+i+'" value="'+(actual||"")+'" min="0" step="100" placeholder="0" inputmode="numeric"></label>' +
+      '<div class="lrow-tags"><span class="status-pill queue">已記 '+count+' 筆</span></div></div>' +
+      '<div class="lrow-amt"><div class="lrow-jpy">預計 NT$ '+fmtInt(row.twd)+'</div><div class="lrow-twd">NT$ '+fmtInt(actual)+'<span class="lrow-label">已花</span></div></div></div>' +
+      '<div class="lrow-actual"><span class="lrow-actual-label">已用 '+usedPct+'%</span>' +
       '<span class="lrow-remain'+(over?" over":"")+'">'+(over?"超支 NT$"+fmtInt(actual-row.twd):"剩餘 NT$"+fmtInt(row.twd-actual))+'</span></div>' +
       '<div class="lrow-bar"><span style="width:'+barPct+'%;background:'+(over?"var(--vermilion)":chartColor)+'"></span></div>' +
     '</div>';
@@ -1313,40 +1457,272 @@ function computeBudget(){
 
   renderPie(rows, total);
 }
-
-function updateActualDisplay(){
-  var rate = parseFloat(fxInput.value) || FX_DEFAULT;
-  var fixedTotal = 0, floatingJpyTotal = 0;
-  LEDGER.forEach(function(row){ if(row.fixed){ fixedTotal+=row.twd; } else { floatingJpyTotal+=row.jpy; } });
-  var floatingTwd = floatingJpyTotal*rate;
-  var actualFloatingTotal = 0;
-  LEDGER.forEach(function(row,i){ if(!row.fixed){ actualFloatingTotal += (actualSpend[i]||0); } });
-  document.getElementById("totalSub").textContent = "已花 NT$"+fmtInt(fixedTotal+actualFloatingTotal)+" ・ 剩餘可花 NT$"+fmtInt(floatingTwd-actualFloatingTotal);
-
-  LEDGER.forEach(function(row,i){
-    if(row.fixed) return;
-    var twd = row.jpy*rate;
-    var actual = actualSpend[i]||0;
-    var over = actual>twd;
-    var barPct = twd>0 ? Math.min(100,(actual/twd)*100) : 0;
-    var rowEl = document.querySelector('.lrow[data-idx="'+i+'"]');
-    if(!rowEl) return;
-    var bar = rowEl.querySelector(".lrow-bar span");
-    if(bar){ bar.style.width = barPct+"%"; bar.style.background = over ? "var(--vermilion)" : "var(--chart-"+(i+1)+")"; }
-    var remain = rowEl.querySelector(".lrow-remain");
-    if(remain){
-      remain.className = "lrow-remain"+(over?" over":"");
-      remain.textContent = over ? "超支 NT$"+fmtInt(actual-twd) : "剩餘 NT$"+fmtInt(twd-actual);
-    }
+/* ---------- quick expense logging ---------- */
+function escapeHtml(s){
+  return String(s).replace(/[&<>"']/g, function(c){
+    return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];
   });
 }
-document.getElementById("ledger").addEventListener("input", function(e){
-  if(!e.target.classList.contains("actual-input")) return;
-  var idx = +e.target.dataset.idx;
-  actualSpend[idx] = parseFloat(e.target.value) || 0;
-  try{ localStorage.setItem(ACTUAL_KEY, JSON.stringify(actualSpend)); }catch(err){}
-  updateActualDisplay();
+
+var LOG_CATS = [];
+LEDGER.forEach(function(row,i){ if(!row.fixed) LOG_CATS.push({idx:i, short:row.short}); });
+
+var logPref = {cat: LOG_CATS[0].idx, cur:"JPY"};
+try{ var _p = JSON.parse(localStorage.getItem(LOGPREF_KEY)); if(_p && typeof _p.cat==="number") logPref = _p; }catch(e){}
+function saveLogPref(){ try{ localStorage.setItem(LOGPREF_KEY, JSON.stringify(logPref)); }catch(e){} }
+
+var logAmount = document.getElementById("logAmount");
+var logNote = document.getElementById("logNote");
+var logConvert = document.getElementById("logConvert");
+var logSave = document.getElementById("logSave");
+var micBtn = document.getElementById("micBtn");
+var logHint = document.getElementById("logHint");
+
+function currentRate(){ return parseFloat(fxInput.value) || FX_DEFAULT; }
+
+function renderCatChips(){
+  document.getElementById("catChips").innerHTML = LOG_CATS.map(function(c){
+    return '<button type="button" class="cat-chip'+(c.idx===logPref.cat?" active":"")+'" data-cat="'+c.idx+'">' +
+      '<span class="cc-dot" style="background:var(--chart-'+(c.idx+1)+')"></span>'+c.short+'</button>';
+  }).join("");
+}
+renderCatChips();
+document.getElementById("catChips").addEventListener("click", function(e){
+  var btn = e.target.closest(".cat-chip");
+  if(!btn) return;
+  logPref.cat = +btn.dataset.cat;
+  saveLogPref();
+  renderCatChips();
 });
+
+function syncCurToggle(){
+  document.querySelectorAll(".cur-btn").forEach(function(b){ b.classList.toggle("active", b.dataset.cur===logPref.cur); });
+}
+syncCurToggle();
+document.getElementById("curToggle").addEventListener("click", function(e){
+  var btn = e.target.closest(".cur-btn");
+  if(!btn) return;
+  logPref.cur = btn.dataset.cur;
+  saveLogPref();
+  syncCurToggle();
+  updateConvertHint();
+  logAmount.focus();
+});
+
+function updateConvertHint(){
+  var v = parseFloat(logAmount.value);
+  if(!v || v<=0){
+    logConvert.className = "log-convert";
+    logConvert.textContent = "輸入金額後自動換算";
+    logSave.disabled = true;
+    return;
+  }
+  logSave.disabled = false;
+  logConvert.className = "log-convert ready";
+  logConvert.textContent = logPref.cur==="JPY"
+    ? "¥ "+fmtInt(v)+" ≈ NT$ "+fmtInt(v*currentRate())+"　（匯率 "+currentRate().toFixed(4)+"）"
+    : "NT$ "+fmtInt(v);
+}
+logAmount.addEventListener("input", updateConvertHint);
+
+function addExpense(){
+  var v = parseFloat(logAmount.value);
+  if(!v || v<=0){ logAmount.focus(); return; }
+  var rate = currentRate();
+  var d = new Date();
+  expenses.push({
+    id: String(Date.now())+Math.random().toString(36).slice(2,6),
+    ts: d.toISOString(),
+    d: ymd(d),
+    t: pad(d.getHours())+":"+pad(d.getMinutes()),
+    cat: logPref.cat,
+    amt: v,
+    cur: logPref.cur,
+    twd: Math.round(logPref.cur==="JPY" ? v*rate : v),
+    rate: rate,
+    note: logNote.value.trim()
+  });
+  saveExpenses();
+  logAmount.value = "";
+  logNote.value = "";
+  updateConvertHint();
+  renderLog();
+  computeBudget();
+  showToast("已記錄 "+(logPref.cur==="JPY" ? "¥ "+fmtInt(v) : "NT$ "+fmtInt(v)));
+  logAmount.focus();
+}
+logSave.addEventListener("click", addExpense);
+logAmount.addEventListener("keydown", function(e){ if(e.key==="Enter") addExpense(); });
+logNote.addEventListener("keydown", function(e){
+  if(e.key!=="Enter") return;
+  if(!parseFloat(logAmount.value)) applyParsed(logNote.value);
+  addExpense();
+});
+
+function tripDayOf(dateStr){
+  var n = null;
+  DAYS.forEach(function(day){ if(day.date===dateStr) n = day.n; });
+  return n;
+}
+
+function renderLog(){
+  var list = document.getElementById("logList");
+  var countEl = document.getElementById("logCount");
+  var todayEl = document.getElementById("logTodaySum");
+  if(!expenses.length){
+    list.innerHTML = '<div class="log-empty">還沒有任何記錄。<br>花錢後輸入金額、點一下分類，按「記一筆」就好。</div>';
+    countEl.textContent = "";
+    todayEl.textContent = "";
+    return;
+  }
+  var grandTotal = 0, todaySum = 0;
+  expenses.forEach(function(e){
+    grandTotal += e.twd;
+    if((e.d || e.ts.slice(0,10)) === todayYMD) todaySum += e.twd;
+  });
+  countEl.textContent = expenses.length+" 筆 ・ 合計 NT$ "+fmtInt(grandTotal);
+  todayEl.textContent = todaySum>0 ? "今天已記 NT$ "+fmtInt(todaySum) : "";
+
+  var sorted = expenses.slice().sort(function(a,b){ return a.ts<b.ts ? 1 : (a.ts>b.ts ? -1 : 0); });
+  var groups = [], map = {};
+  sorted.forEach(function(e){
+    var key = e.d || e.ts.slice(0,10);
+    if(!map[key]){ map[key] = {key:key, items:[], sum:0}; groups.push(map[key]); }
+    map[key].items.push(e);
+    map[key].sum += e.twd;
+  });
+
+  list.innerHTML = groups.map(function(g){
+    var dt = parseYMD(g.key);
+    var label = (dt.getMonth()+1)+"/"+dt.getDate()+"（"+"日一二三四五六".charAt(dt.getDay())+"）";
+    var dn = tripDayOf(g.key);
+    if(dn) label += " ・ Day "+dn;
+    var head = '<div class="log-day"><span class="log-day-label">'+label+'</span><span class="log-day-sum">NT$ '+fmtInt(g.sum)+'</span></div>';
+    return head + g.items.map(function(e){
+      var cat = LEDGER[e.cat];
+      var main = e.cur==="JPY" ? "¥ "+fmtInt(e.amt) : "NT$ "+fmtInt(e.amt);
+      return '<div class="log-item"><span class="log-dot" style="background:var(--chart-'+(e.cat+1)+')"></span>' +
+        '<div class="log-main"><div class="log-cat">'+(cat?cat.short:"其他")+(e.note?' <span class="log-note-text">'+escapeHtml(e.note)+'</span>':'')+'</div>' +
+        '<div class="log-time">'+(e.t || "")+'</div></div>' +
+        '<div class="log-amt"><div class="log-amt-main">'+main+'</div>' +
+        (e.cur==="JPY" ? '<div class="log-amt-sub">NT$ '+fmtInt(e.twd)+'</div>' : '') + '</div>' +
+        '<button class="log-del" data-id="'+e.id+'" aria-label="刪除這筆">×</button></div>';
+    }).join("");
+  }).join("");
+}
+
+document.getElementById("logList").addEventListener("click", function(e){
+  var btn = e.target.closest(".log-del");
+  if(!btn) return;
+  var id = btn.dataset.id, idx = -1;
+  expenses.forEach(function(x,i){ if(x.id===id) idx = i; });
+  if(idx<0) return;
+  var removed = expenses.splice(idx,1)[0];
+  saveExpenses(); renderLog(); computeBudget();
+  showToast("已刪除一筆", "復原", function(){
+    expenses.splice(idx,0,removed);
+    saveExpenses(); renderLog(); computeBudget();
+  });
+});
+
+document.getElementById("logExport").addEventListener("click", function(){
+  if(!expenses.length){ showToast("還沒有可複製的記錄"); return; }
+  var lines = ["日期\t時間\t分類\t幣別\t原幣金額\t台幣\t備註"];
+  expenses.slice().sort(function(a,b){ return a.ts<b.ts ? -1 : 1; }).forEach(function(e){
+    var cat = LEDGER[e.cat];
+    lines.push([e.d||e.ts.slice(0,10), e.t||"", cat?cat.short:"", e.cur, e.amt, e.twd, e.note||""].join("\t"));
+  });
+  var text = lines.join("\n");
+  var done = function(){ showToast("已複製 "+expenses.length+" 筆記錄"); };
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(text).then(done, function(){ fallbackCopy(text, done); });
+  } else { fallbackCopy(text, done); }
+});
+function fallbackCopy(text, done){
+  var ta = document.createElement("textarea");
+  ta.value = text; ta.style.position="fixed"; ta.style.opacity="0";
+  document.body.appendChild(ta); ta.select();
+  try{ document.execCommand("copy"); done(); }catch(e){ showToast("複製失敗，請手動選取"); }
+  document.body.removeChild(ta);
+}
+
+/* toast with optional undo */
+var toastEl = document.getElementById("toast");
+var toastText = document.getElementById("toastText");
+var toastAction = document.getElementById("toastAction");
+var toastTimer = null, toastHandler = null;
+function showToast(text, actionLabel, handler){
+  toastText.textContent = text;
+  toastHandler = handler || null;
+  if(actionLabel && handler){ toastAction.textContent = actionLabel; toastAction.hidden = false; }
+  else { toastAction.hidden = true; }
+  toastEl.hidden = false;
+  toastEl.style.animation = "none";
+  void toastEl.offsetWidth;
+  toastEl.style.animation = "";
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(function(){ toastEl.hidden = true; toastHandler = null; }, handler ? 6000 : 2200);
+}
+toastAction.addEventListener("click", function(){
+  if(toastHandler) toastHandler();
+  toastEl.hidden = true; toastHandler = null;
+});
+
+/* parse spoken or typed shorthand like "拉麵 1200 日圓" */
+function parseSpoken(text){
+  var t = String(text||"").replace(/[，,、]/g,"").replace(/[０-９]/g, function(c){
+    return String.fromCharCode(c.charCodeAt(0)-0xFEE0);
+  });
+  var out = {};
+  var m = t.match(/(\d+(?:\.\d+)?)/);
+  if(m) out.amt = parseFloat(m[1]);
+  if(/日[圓円元幣]|円|yen|jpy/i.test(t)) out.cur = "JPY";
+  else if(/台幣|新台幣|twd|nt\$?/i.test(t)) out.cur = "TWD";
+  var rules = [
+    {idx:3, re:/吃|餐|飯|麵|拉麵|壽司|燒肉|咖哩|咖啡|甜點|蛋糕|冰|居酒屋|早餐|午餐|晚餐|宵夜|飲料|鰻魚|牛肉/},
+    {idx:4, re:/買|購|伴手禮|土產|名產|藥妝|酒|清酒|紀念|禮物|百貨|免稅|衣/},
+    {idx:2, re:/車|巴士|公車|計程車|地鐵|電車|新幹線|票|入場|寄物|置物|投幣|朝市|市場|小吃|串燒|纜車/},
+    {idx:5, re:/雜|其他|臨時|備用|零/}
+  ];
+  for(var i=0;i<rules.length;i++){ if(rules[i].re.test(t)){ out.cat = rules[i].idx; break; } }
+  out.note = t.replace(/(\d+(?:\.\d+)?)/,"").replace(/日[圓円元幣]|円|新台幣|台幣|元|塊/g,"").trim();
+  return out;
+}
+
+function applyParsed(text){
+  var p = parseSpoken(text);
+  if(p.amt) logAmount.value = p.amt;
+  if(p.cur){ logPref.cur = p.cur; syncCurToggle(); }
+  if(typeof p.cat === "number"){ logPref.cat = p.cat; renderCatChips(); }
+  if(p.note) logNote.value = p.note;
+  saveLogPref();
+  updateConvertHint();
+  if(!p.amt){ showToast("沒聽到金額，請手動輸入"); logAmount.focus(); }
+}
+
+/* voice input where the browser supports it (iOS Safari does not) */
+var SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+if(SR){
+  micBtn.hidden = false;
+  logHint.textContent = "按 🎤 直接說「拉麵 1200 日圓」，金額、幣別、分類會自動填好；也可以直接打字，按 Enter 就記一筆。";
+  var rec = new SR();
+  rec.lang = "zh-TW";
+  rec.interimResults = false;
+  rec.maxAlternatives = 1;
+  micBtn.addEventListener("click", function(){
+    try{ rec.start(); micBtn.classList.add("listening"); }
+    catch(err){ micBtn.classList.remove("listening"); }
+  });
+  rec.onresult = function(ev){ applyParsed(ev.results[0][0].transcript || ""); };
+  rec.onerror = function(){ micBtn.classList.remove("listening"); showToast("聽不清楚，再試一次"); };
+  rec.onend = function(){ micBtn.classList.remove("listening"); };
+} else {
+  logHint.textContent = "這台裝置不支援網頁語音辨識（iPhone 屬於此類）。改用鍵盤上的麥克風鍵口述到備註欄一樣快，打完按 Enter 直接記一筆。";
+}
+
+renderLog();
+updateConvertHint();
+
 fxInput.addEventListener("input", function(){
   manualOverride = true;
   fxMeta.className = "fx-meta";
