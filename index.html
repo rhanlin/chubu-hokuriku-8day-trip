@@ -659,6 +659,10 @@ footer{max-width:920px;margin:60px auto 0;padding:20px 20px 40px;text-align:cent
           <button id="apiKeySave">儲存</button>
           <button id="apiKeyClear" class="key-clear">清除</button>
         </div>
+        <div class="key-row" style="margin-top:8px;">
+          <input type="text" id="modelInput" placeholder="模型名稱（留空＝自動選擇）" autocomplete="off" spellcheck="false">
+          <button id="modelSave">儲存</button>
+        </div>
         <div class="key-meta" id="keyMeta"></div>
         <p style="margin-top:10px;"><a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener">前往 Google AI Studio 取得免費金鑰 →</a>　建議在 Google Cloud 主控台為金鑰加上使用限制。</p>
       </div>
@@ -1767,8 +1771,13 @@ function applyParsed(text){
 
 /* ---------- receipt scanning (Gemini vision, key stays on this device) ---------- */
 var GEMINI_KEY_KEY = "jp_chubu_trip_gemini_key";
+var GEMINI_MODEL_KEY = "jp_chubu_trip_gemini_model";
+/* model names get retired periodically; try current ones in order and remember what worked */
+var MODEL_FALLBACKS = ["gemini-3.6-flash","gemini-3.8-flash","gemini-3.7-flash","gemini-3.5-flash","gemini-2.5-flash"];
 var geminiKey = "";
+var geminiModel = "";
 try{ geminiKey = localStorage.getItem(GEMINI_KEY_KEY) || ""; }catch(e){}
+try{ geminiModel = localStorage.getItem(GEMINI_MODEL_KEY) || ""; }catch(e){}
 var lastReceipt = null;
 
 var camBtn = document.getElementById("camBtn");
@@ -1782,15 +1791,27 @@ var keyMeta = document.getElementById("keyMeta");
 var CAT_MAP = {transport_ticket:2, food:3, shopping:4, misc:5};
 
 function renderKeyMeta(){
+  var modelNote = "模型：" + (geminiModel || "自動（"+MODEL_FALLBACKS[0]+" 起試）");
   if(geminiKey){
     keyMeta.className = "key-meta ok";
-    keyMeta.textContent = "已設定金鑰（…"+geminiKey.slice(-4)+"），拍照掃描已啟用。";
+    keyMeta.textContent = "已設定金鑰（…"+geminiKey.slice(-4)+"），拍照掃描已啟用。"+modelNote;
   } else {
     keyMeta.className = "key-meta";
-    keyMeta.textContent = "尚未設定金鑰，拍照掃描會先跳出這個設定區。";
+    keyMeta.textContent = "尚未設定金鑰，拍照掃描會先跳出這個設定區。"+modelNote;
   }
 }
 renderKeyMeta();
+
+document.getElementById("modelSave").addEventListener("click", function(){
+  var v = document.getElementById("modelInput").value.trim().replace(/^models\//,"");
+  geminiModel = v;
+  try{
+    if(v) localStorage.setItem(GEMINI_MODEL_KEY, v);
+    else localStorage.removeItem(GEMINI_MODEL_KEY);
+  }catch(e){}
+  renderKeyMeta();
+  showToast(v ? "已指定模型 "+v : "已改回自動選擇模型");
+});
 
 document.getElementById("apiKeySave").addEventListener("click", function(){
   var v = apiKeyInput.value.trim();
@@ -1861,12 +1882,27 @@ var RECEIPT_SCHEMA = {
   required:["total","currency","category"]
 };
 
-function scanReceipt(b64){
+function parseModelJson(txt){
+  var s = String(txt).trim().replace(/^```(?:json)?\s*/i,"").replace(/\s*```$/,"");
+  return JSON.parse(s);
+}
+
+function modelsToTry(){
+  var list = geminiModel ? [geminiModel] : [];
+  MODEL_FALLBACKS.forEach(function(m){ if(list.indexOf(m)<0) list.push(m); });
+  return list;
+}
+
+function isModelUnavailable(err){
+  return /model|not found|not available|unsupported|404/i.test(String(err && err.message || ""));
+}
+
+function callGemini(model, b64){
   var body = {
     contents:[{parts:[{text:RECEIPT_PROMPT},{inline_data:{mime_type:"image/jpeg", data:b64}}]}],
     generationConfig:{ responseMimeType:"application/json", responseSchema:RECEIPT_SCHEMA, temperature:0 }
   };
-  return fetch("https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent", {
+  return fetch("https://generativelanguage.googleapis.com/v1beta/models/"+encodeURIComponent(model)+":generateContent", {
     method:"POST",
     headers:{"content-type":"application/json","x-goog-api-key":geminiKey},
     body:JSON.stringify(body)
@@ -1879,8 +1915,31 @@ function scanReceipt(b64){
     var c = j.candidates && j.candidates[0];
     var txt = c && c.content && c.content.parts && c.content.parts[0] && c.content.parts[0].text;
     if(!txt) throw new Error("沒有取得辨識結果，換個角度再拍一次");
-    return JSON.parse(txt);
+    return parseModelJson(txt);
   });
+}
+
+function scanReceipt(b64){
+  var list = modelsToTry(), lastErr = null;
+  function attempt(i){
+    if(i >= list.length) return Promise.reject(lastErr || new Error("沒有可用的模型"));
+    return callGemini(list[i], b64).then(function(r){
+      if(list[i] !== geminiModel){
+        geminiModel = list[i];
+        try{ localStorage.setItem(GEMINI_MODEL_KEY, geminiModel); }catch(e){}
+        renderKeyMeta();
+      }
+      return r;
+    }, function(err){
+      lastErr = err;
+      if(isModelUnavailable(err) && i+1 < list.length){
+        setScanStatus("模型 "+list[i]+" 不可用，改試 "+list[i+1]+"…", true);
+        return attempt(i+1);
+      }
+      throw err;
+    });
+  }
+  return attempt(0);
 }
 
 function renderScanResult(r){
