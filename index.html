@@ -9,6 +9,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800&family=Noto+Sans+TC:wght@400;500;600;700;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css">
+<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"></script>
 <style>
 :root{
   --paper:#FAFAF8;
@@ -188,21 +190,23 @@ section{padding-top:28px;}
 
 .map-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:18px 18px 14px;position:relative;animation:rise .6s .1s ease both;}
 .map-card .cap{font-size:12px;color:var(--ink-faint);margin-top:6px;text-align:center;letter-spacing:.02em;}
-.map-canvas-wrap{position:relative;width:100%;height:340px;}
-.map-canvas-wrap.small{height:130px;}
-canvas{display:block;width:100%;height:100%;}
-.live-dot{
-  position:absolute;width:14px;height:14px;border-radius:50%;background:var(--vermilion);
-  transform:translate(-50%,-50%);pointer-events:none;box-shadow:0 0 0 4px color-mix(in srgb, var(--vermilion) 25%, transparent);
-}
-.live-dot::after{
-  content:"";position:absolute;inset:-8px;border-radius:50%;border:2px solid var(--vermilion);
-  animation:pulsering 2.2s ease-out infinite;
-}
-.live-dot.start{background:var(--indigo);box-shadow:0 0 0 4px color-mix(in srgb, var(--indigo) 25%, transparent);}
-.live-dot.start::after{border-color:var(--indigo);}
-.live-dot.done{background:var(--gold);box-shadow:0 0 0 4px color-mix(in srgb, var(--gold) 25%, transparent);}
-.live-dot.done::after{display:none;}
+.map-canvas-wrap{position:relative;width:100%;height:340px;border-radius:12px;overflow:hidden;}
+.map-canvas-wrap.small{height:220px;}
+.leaflet-box{width:100%;height:100%;background:var(--surface-sunk);}
+.leaflet-tile-pane{filter:grayscale(38%) contrast(0.96) brightness(1.04) saturate(0.9);}
+.leaflet-container{font-family:var(--font-body);background:var(--surface-sunk);}
+.leaflet-popup-content-wrapper{background:var(--ink);color:var(--paper);border-radius:10px;box-shadow:var(--shadow);}
+.leaflet-popup-content{margin:8px 12px;font-size:12.5px;font-weight:600;}
+.leaflet-popup-tip{background:var(--ink);}
+.leaflet-control-attribution{background:color-mix(in srgb, var(--surface) 85%, transparent)!important;color:var(--ink-faint)!important;font-size:9.5px!important;}
+.leaflet-control-attribution a{color:var(--ink-soft)!important;}
+.leaflet-tooltip{background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:6px;font-size:11px;font-weight:700;padding:3px 8px;box-shadow:var(--shadow);}
+.leaflet-tooltip-top:before{border-top-color:var(--surface);}
+.pin{border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--font-mono);font-weight:700;box-sizing:border-box;}
+.pin.pin-done{background:var(--ink);border:2px solid var(--ink);color:var(--paper);}
+.pin.pin-active{background:var(--vermilion);border:2px solid var(--vermilion);color:#fff;box-shadow:0 0 0 5px color-mix(in srgb, var(--vermilion) 25%, transparent);}
+.pin.pin-upcoming{background:var(--surface);border:2px dashed var(--line-strong);color:var(--ink-faint);}
+.pin.pin-plain{background:var(--surface);border:2px solid var(--ink-soft);color:var(--ink);}
 
 .reminders{display:flex;flex-direction:column;gap:10px;}
 .alert{
@@ -290,7 +294,10 @@ details.acc .acc-body{padding:0 16px 16px;font-size:13.5px;color:var(--ink-soft)
 .now-flag{background:var(--vermilion);color:#fff;}
 .next-flag{background:var(--indigo-soft);color:var(--indigo);}
 .t-detail{font-size:13px;color:var(--ink-soft);margin-top:5px;}
-.status-pill{display:inline-block;margin-top:7px;font-size:11px;font-weight:700;padding:2px 8px;border-radius:999px;}
+.t-tags{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:7px;}
+.status-pill{display:inline-block;font-size:11px;font-weight:700;padding:2px 8px;border-radius:999px;}
+.t-nav{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:700;padding:2px 9px;border-radius:999px;background:var(--surface-sunk);color:var(--ink-soft);text-decoration:none;border:1px solid var(--line-strong);}
+.t-nav:hover{color:var(--vermilion);border-color:var(--vermilion);}
 .status-pill.booked{background:var(--indigo-soft);color:var(--indigo);}
 .status-pill.queue{background:var(--vermilion-soft);color:var(--vermilion);}
 .status-pill.open{background:var(--surface-sunk);color:var(--ink-soft);}
@@ -409,7 +416,7 @@ footer{max-width:920px;margin:60px auto 0;padding:20px 20px 40px;text-align:cent
   .stat-row{grid-template-columns:repeat(2,1fr);}
   .stat{padding:14px 8px;}
   .map-canvas-wrap{height:280px;}
-  .map-canvas-wrap.small{height:110px;}
+  .map-canvas-wrap.small{height:200px;}
   .section-head{margin:28px 0 12px;}
 }
 @media (max-width:380px){
@@ -461,7 +468,7 @@ footer{max-width:920px;margin:60px auto 0;padding:20px 20px 40px;text-align:cent
 
     <div class="section-head"><h2>行程路線</h2><span class="count">一圈迴路・8 個停留點</span></div>
     <div class="map-card">
-      <div class="map-canvas-wrap"><canvas id="loopMap"></canvas></div>
+      <div class="map-canvas-wrap"><div id="loopMap" class="leaflet-box"></div></div>
       <div class="cap">上高地為 Day 3 的一日來回支線，其餘為主要移動路徑</div>
     </div>
 
@@ -487,7 +494,7 @@ footer{max-width:920px;margin:60px auto 0;padding:20px 20px 40px;text-align:cent
   <section id="view-itinerary" hidden>
     <div class="day-scroller" id="dayScroller"></div>
     <div class="map-card" style="margin-bottom:20px;">
-      <div class="map-canvas-wrap small"><canvas id="dayMap"></canvas></div>
+      <div class="map-canvas-wrap small"><div id="dayMap" class="leaflet-box"></div></div>
     </div>
     <div class="day-panel" id="dayPanel"></div>
   </section>
@@ -567,12 +574,12 @@ var FX_CACHE_KEY = "jp_chubu_trip_fx_cache";
 
 var DAYS = [
   {n:1,date:"2026-09-09",weekday:"二",route:"中部國際機場 → 名古屋",hotel:"名古屋JR門樓酒店",hotelNote:"與JR名古屋站直結，15樓大廳",
-   mapNodes:[{label:"NGO 機場",icon:"✈️"},{label:"名鐵名古屋",icon:"🚄"},{label:"JR門樓酒店",icon:"🏨"}],
+   mapNodes:[{label:"NGO 機場",icon:"✈️",c:[34.8599396,136.8161753]},{label:"JR門樓酒店",icon:"🏨",c:[35.1723176,136.8821393]}],
    timeline:[
      {time:"21:05",end:"21:55",icon:"✈️",title:"班機降落與入境通關",detail:"華航 CI0150 抵達 NGO 第一航廈，完成檢疫、入境查驗（Visit Japan Web QR）並提領托運行李。"},
      {time:"21:55",end:"22:05",icon:"🚶",title:"入境大廳 → 名鐵機場站",detail:"步行約 3–5 分鐘穿過交通廣場，直達名鐵剪票口。"},
-     {time:"22:07",end:"22:36",icon:"🚄",title:"μ-SKY 直達名鐵名古屋",detail:"全車特別車對號座，大行李置於車廂行李架。備案：22:17 / 22:47 名鐵特急。",status:"open",statusText:"隨到隨搭"},
-     {time:"22:40",end:"23:00",icon:"🏨",title:"轉往名古屋JR門樓酒店",detail:"沿 JR「櫻通口」方向步行，搭乘直達電梯至 15 樓飯店大廳 Check-in。"}
+     {time:"22:07",end:"22:36",icon:"🚄",title:"μ-SKY 直達名鐵名古屋",detail:"全車特別車對號座，大行李置於車廂行李架。備案：22:17 / 22:47 名鐵特急。",status:"open",statusText:"隨到隨搭",nav:"名鉄名古屋駅"},
+     {time:"22:40",end:"23:00",icon:"🏨",title:"轉往名古屋JR門樓酒店",detail:"沿 JR「櫻通口」方向步行，搭乘直達電梯至 15 樓飯店大廳 Check-in。",nav:"名古屋JRゲートタワーホテル"}
    ],
    alerts:[
      {level:"must",text:"抵達當夜請務必至 JR 名古屋站「e5489」標誌機台，用 KKday QR code 兌換明日飛驒號車票（每人 2 張：乘車券＋特急券）。"},
@@ -581,14 +588,14 @@ var DAYS = [
    luggage:"隨身攜帶上車，飯店與車站直結、全程室內無障礙。"
   },
   {n:2,date:"2026-09-10",weekday:"三",route:"名古屋 → 高山",hotel:"FAV LUX 飛驒高山",hotelNote:"JR高山站西口步行約5分鐘（連住2晚）",
-   mapNodes:[{label:"名古屋站",icon:"🏨"},{label:"JR特急飛驒3號",icon:"🚄"},{label:"高山老街",icon:"🍡"},{label:"飛驒之里",icon:"🏘️"}],
+   mapNodes:[{label:"名古屋站",icon:"🏨",c:[35.1723176,136.8821393]},{label:"高山站",icon:"🚄",c:[36.1460989,137.2521823]},{label:"高山老街",icon:"🍡",c:[36.1412570,137.2596330]},{label:"飛驒之里",icon:"🏘️",c:[36.1314919,137.2357015]}],
    timeline:[
      {time:"07:30",end:"08:20",icon:"🏨",title:"門樓酒店退房與早餐",detail:"飯店與 JR 名古屋站直結，下樓即達中央剪票口，時間充裕。"},
-     {time:"08:43",end:"10:58",icon:"🚄",title:"特急飛驒 3 號　名古屋 → 高山",detail:"HC85系新型混能特急，車程 2 小時 15 分，大行李置於車廂行李架。",status:"booked",statusText:"7車 6C/6D・KKday憑證"},
+     {time:"08:43",end:"10:58",icon:"🚄",title:"特急飛驒 3 號　名古屋 → 高山",detail:"HC85系新型混能特急，車程 2 小時 15 分，大行李置於車廂行李架。",status:"booked",statusText:"7車 6C/6D・KKday憑證",nav:"高山駅"},
      {time:"10:58",end:"11:20",icon:"🚶",title:"高山站 → FAV LUX 寄放行李",detail:"出西口步行 5 分鐘，先寄放大行李，輕裝出發逛街。"},
-     {time:"11:25",end:"13:40",icon:"🍡",title:"高山老街散策 & 午餐",detail:"三町通品嚐飛驒牛握壽司、飛驒牛串燒或午間定食，順路逛宮川朝市周邊。"},
-     {time:"14:00",end:"16:15",icon:"🏘️",title:"飛驒之里（飛騨の里）",detail:"搭乘 Sarubobo 巴士（濃飛巴士中心1號月台，單程250円）往返，參觀合掌造聚落與民俗工藝。",status:"open",statusText:"免預約・刷IC卡"},
-     {time:"17:00",end:"19:00",icon:"🥩",title:"丸明 飛驒高山店　晚餐",detail:"門口登記簿填名制，飛驒牛燒肉盛合拼盤。",status:"queue",statusText:"現場排隊・16:45前抵達"}
+     {time:"11:25",end:"13:40",icon:"🍡",title:"高山老街散策 & 午餐",detail:"三町通品嚐飛驒牛握壽司、飛驒牛串燒或午間定食，順路逛宮川朝市周邊。",nav:"高山市三町伝統的建造物群保存地区"},
+     {time:"14:00",end:"16:15",icon:"🏘️",title:"飛驒之里（飛騨の里）",detail:"搭乘 Sarubobo 巴士（濃飛巴士中心1號月台，單程250円）往返，參觀合掌造聚落與民俗工藝。",status:"open",statusText:"免預約・刷IC卡",nav:"飛騨の里"},
+     {time:"17:00",end:"19:00",icon:"🥩",title:"丸明 飛驒高山店　晚餐",detail:"門口登記簿填名制，飛驒牛燒肉盛合拼盤。",status:"queue",statusText:"現場排隊・16:45前抵達",nav:"丸明 飛騨高山店"}
    ],
    alerts:[
      {level:"must",text:"丸明無法電話預約，晚間 17:00 開門，建議 16:45–17:00 抵達門口填寫姓名人數以搶第一輪；超過 17:30 恐候 45–60 分。備案：西口步行2分的「味藏天國」。"},
@@ -598,12 +605,12 @@ var DAYS = [
    luggage:"抵達即寄放於 FAV LUX 櫃檯，Check-in 前輕裝出遊。"
   },
   {n:3,date:"2026-09-11",weekday:"四",route:"上高地一日遊",hotel:"FAV LUX 飛驒高山",hotelNote:"連住第2晚",
-   mapNodes:[{label:"高山",icon:"🏨"},{label:"平湯溫泉",icon:"🚌"},{label:"大正池",icon:"🌲"},{label:"河童橋",icon:"🏞️"}],
+   mapNodes:[{label:"高山",icon:"🏨",c:[36.1460989,137.2521823]},{label:"平湯溫泉",icon:"🚌",c:[36.1906120,137.5517520]},{label:"大正池",icon:"🌲",c:[36.2283914,137.6196921]},{label:"河童橋",icon:"🏞️",c:[36.2487647,137.6384190]}],
    timeline:[
      {time:"06:40",end:"07:00",icon:"🚶",title:"步行至濃飛巴士中心",detail:"高山站東口濃飛巴士中心 5 號月台排隊。"},
-     {time:"07:00",end:"08:18",icon:"🚌",title:"高山 → 平湯溫泉 → 大正池",detail:"平湯溫泉同站轉乘接駁車，於「大正池」下車。全段免預約，依現場排隊上車。",status:"open",statusText:"免預約・首選班次"},
-     {time:"08:20",end:"11:30",icon:"🥾",title:"大正池 → 河童橋（健行）",detail:"步道平緩，全長約3.5公里、約2–2.5小時，途經田代池、田代濕原、梓川步道。"},
-     {time:"11:30",end:"13:30",icon:"🏞️",title:"河童橋周邊散策 & 午餐",detail:"欣賞穗高連峰，於五千尺Hotel或巴士總站2F食堂用餐（岩魚定食、飛驒牛燉飯）。"},
+     {time:"07:00",end:"08:18",icon:"🚌",title:"高山 → 平湯溫泉 → 大正池",detail:"平湯溫泉同站轉乘接駁車，於「大正池」下車。全段免預約，依現場排隊上車。",status:"open",statusText:"免預約・首選班次",nav:"大正池"},
+     {time:"08:20",end:"11:30",icon:"🥾",title:"大正池 → 河童橋（健行）",detail:"步道平緩，全長約3.5公里、約2–2.5小時，途經田代池、田代濕原、梓川步道。",nav:"河童橋"},
+     {time:"11:30",end:"13:30",icon:"🏞️",title:"河童橋周邊散策 & 午餐",detail:"欣賞穗高連峰，於五千尺Hotel或巴士總站2F食堂用餐（岩魚定食、飛驒牛燉飯）。",nav:"五千尺ホテル上高地"},
      {time:"14:00",end:"15:31",icon:"🚌",title:"上高地 → 平湯溫泉 → 高山",detail:"搭乘回程巴士返回高山濃飛巴士中心。",status:"open",statusText:"免預約"},
      {time:"17:30",end:"19:30",icon:"🍽️",title:"晚餐",detail:"丸明補吃方案，或「味藏天國」「中華蕎麥 桔梗屋」高山拉麵。"}
    ],
@@ -615,14 +622,14 @@ var DAYS = [
    luggage:"大行李留置飯店房間，僅背健行雙肩包（保暖外套、水、雨具）。"
   },
   {n:4,date:"2026-09-12",weekday:"五",route:"高山 → 白川鄉合掌村 → 金澤",hotel:"THE HOTEL SANRAKU KANAZAWA",hotelNote:"金澤山樂酒店・近近江町市場（連住2晚）",
-   mapNodes:[{label:"高山",icon:"🏨"},{label:"白川鄉",icon:"🏘️"},{label:"金澤西口",icon:"🚕"},{label:"山樂酒店",icon:"🏨"}],
+   mapNodes:[{label:"高山",icon:"🏨",c:[36.1460989,137.2521823]},{label:"白川鄉",icon:"🏘️",c:[36.2620171,136.9068702]},{label:"金澤西口",icon:"🚕",c:[36.5773191,136.6472778]},{label:"山樂酒店",icon:"🏨",c:[36.5717309,136.6559877]}],
    timeline:[
      {time:"08:30",end:"08:55",icon:"🚶",title:"FAV LUX 退房 → 巴士中心寄放行李",detail:"退房後推大行李穿過車站通道至東口濃飛巴士中心寄物。"},
      {time:"08:55",end:"11:45",icon:"🍡",title:"宮川朝市 & 老街悠閒巡禮",detail:"飛驒牛奶、烤糰子、布丁，漫步三町通古街與高山陣屋。"},
-     {time:"12:10",end:"13:00",icon:"🚌",title:"濃飛巴士 0044 便　高山 → 白川鄉",detail:"6A/6B 行駛方向左側景觀位，出飛驒隧道可俯瞰合掌聚落全景。大行李置於車底行李艙。",status:"booked",statusText:"6A/6B・高山4號月台"},
-     {time:"13:00",end:"17:15",icon:"🏘️",title:"白川鄉聚落漫步 & 城跡展望台",detail:"人工行李寄存（約800–1,000円/件）；接駁車上荻町城跡展望台（單程200円），參觀和田家合掌造內部。"},
-     {time:"17:30",end:"18:45",icon:"🚌",title:"濃飛巴士 0004 便　白川鄉 → 金澤西口",detail:"直達金澤站西口，大行李置於車底行李艙。",status:"booked",statusText:"10C/10D・白川鄉3號月台"},
-     {time:"18:50",end:"19:05",icon:"🚕",title:"金澤西口 → 山樂酒店",detail:"西口排班處直接搭計程車（車程約6–8分，約1,100–1,300円）。"},
+     {time:"12:10",end:"13:00",icon:"🚌",title:"濃飛巴士 0044 便　高山 → 白川鄉",detail:"6A/6B 行駛方向左側景觀位，出飛驒隧道可俯瞰合掌聚落全景。大行李置於車底行李艙。",status:"booked",statusText:"6A/6B・高山4號月台",nav:"白川郷"},
+     {time:"13:00",end:"17:15",icon:"🏘️",title:"白川鄉聚落漫步 & 城跡展望台",detail:"人工行李寄存（約800–1,000円/件）；接駁車上荻町城跡展望台（單程200円），參觀和田家合掌造內部。",nav:"荻町城跡展望台"},
+     {time:"17:30",end:"18:45",icon:"🚌",title:"濃飛巴士 0004 便　白川鄉 → 金澤西口",detail:"直達金澤站西口，大行李置於車底行李艙。",status:"booked",statusText:"10C/10D・白川鄉3號月台",nav:"金沢駅西口"},
+     {time:"18:50",end:"19:05",icon:"🚕",title:"金澤西口 → 山樂酒店",detail:"西口排班處直接搭計程車（車程約6–8分，約1,100–1,300円）。",nav:"THE HOTEL SANRAKU KANAZAWA"},
      {time:"19:20",end:null,icon:"🍽️",title:"近江町市場周邊晚餐",detail:"北陸鮮魚丼飯、居酒屋或在地黑喉料理。"}
    ],
    alerts:[
@@ -633,15 +640,15 @@ var DAYS = [
    luggage:"三段式運送：高山寄物 → 白川鄉人工寄放 → 金澤西口計程車直送飯店。"
   },
   {n:5,date:"2026-09-13",weekday:"六",route:"金澤市區深度漫遊",hotel:"THE HOTEL SANRAKU KANAZAWA",hotelNote:"連住第2晚",
-   mapNodes:[{label:"山樂酒店",icon:"🏨"},{label:"近江町市場",icon:"🍣"},{label:"東茶屋街",icon:"🍵"},{label:"兼六園",icon:"🌸"},{label:"金澤城",icon:"🏯"}],
+   mapNodes:[{label:"山樂酒店",icon:"🏨",c:[36.5717309,136.6559877]},{label:"近江町市場",icon:"🍣",c:[36.5717309,136.6559877]},{label:"東茶屋街",icon:"🍵",c:[36.5725559,136.6666756]},{label:"兼六園",icon:"🌸",c:[36.5624267,136.6623546]},{label:"金澤城",icon:"🏯",c:[36.5657619,136.6594470]}],
    timeline:[
      {time:"08:30",end:"08:40",icon:"🚶",title:"山樂酒店 → 近江町市場",detail:"純步行約350公尺，4–5分鐘。"},
-     {time:"08:40",end:"11:30",icon:"🍣",title:"近江町市場巡禮",detail:"もりもり壽司抽號碼牌後，先逛島田水産生蠔海膽、Omicho可樂餅，再進場享用黑喉、白蝦。",status:"queue",statusText:"現場抽號・08:40先抽"},
-     {time:"11:45",end:"13:30",icon:"🍵",title:"東茶屋街散策",detail:"木造格子窗老街，箔一東山店金箔冰淇淋，參觀志摩、懷華樓等傳統茶屋。"},
-     {time:"13:50",end:"14:40",icon:"☕",title:"SWAY COFFEE ROASTER",detail:"自家烘焙手沖咖啡與甜點，小憩補充體力。"},
-     {time:"14:40",end:"16:30",icon:"🌸",title:"兼六園",detail:"日本三大名園之一，徽軫石燈籠、霞之池、時雨亭（門票320円）。"},
-     {time:"16:30",end:"17:30",icon:"🏯",title:"金澤城公園",detail:"菱櫓、五十間長屋、石垣（園區免費，長屋內部參觀至16:45）。"},
-     {time:"18:00",end:"19:15",icon:"🍛",title:"Turban 咖哩 本店　晚餐",detail:"經典金澤咖哩：不鏽鋼盤盛裝、高麗菜絲、濃黑醬汁炸豬排。座位僅吧檯約10席，翻桌快。"}
+     {time:"08:40",end:"11:30",icon:"🍣",title:"近江町市場巡禮",detail:"もりもり壽司抽號碼牌後，先逛島田水産生蠔海膽、Omicho可樂餅，再進場享用黑喉、白蝦。",status:"queue",statusText:"現場抽號・08:40先抽",nav:"もりもり寿司 近江町店"},
+     {time:"11:45",end:"13:30",icon:"🍵",title:"東茶屋街散策",detail:"木造格子窗老街，箔一東山店金箔冰淇淋，參觀志摩、懷華樓等傳統茶屋。",nav:"ひがし茶屋街"},
+     {time:"13:50",end:"14:40",icon:"☕",title:"SWAY COFFEE ROASTER",detail:"自家烘焙手沖咖啡與甜點，小憩補充體力。",nav:"SWAY COFFEE ROASTER 金沢"},
+     {time:"14:40",end:"16:30",icon:"🌸",title:"兼六園",detail:"日本三大名園之一，徽軫石燈籠、霞之池、時雨亭（門票320円）。",nav:"兼六園"},
+     {time:"16:30",end:"17:30",icon:"🏯",title:"金澤城公園",detail:"菱櫓、五十間長屋、石垣（園區免費，長屋內部參觀至16:45）。",nav:"金沢城公園"},
+     {time:"18:00",end:"19:15",icon:"🍛",title:"Turban 咖哩 本店　晚餐",detail:"經典金澤咖哩：不鏽鋼盤盛裝、高麗菜絲、濃黑醬汁炸豬排。座位僅吧檯約10席，翻桌快。",nav:"ターバンカレー本店"}
    ],
    alerts:[
      {level:"must",text:"もりもり壽司市場店人潮極多，08:40–08:45 先至門口抽紙本號碼牌，掃 QR 隨時確認叫號進度，過號需重新排隊。"},
@@ -651,17 +658,17 @@ var DAYS = [
    luggage:"大行李全天留置山樂酒店房間，輕裝隨身包出發。"
   },
   {n:6,date:"2026-09-14",weekday:"日",route:"金澤 → 名古屋",hotel:"NIKKO STYLE NAGOYA",hotelNote:"名古屋日航尚格酒店（連住2晚）",
-   mapNodes:[{label:"金澤",icon:"🏨"},{label:"敦賀轉乘",icon:"🚄"},{label:"名古屋站",icon:"🏨"},{label:"YORONIKU",icon:"🥩"},{label:"綠洲21",icon:"🌃"}],
+   mapNodes:[{label:"金澤",icon:"🏨",c:[36.5773191,136.6472778]},{label:"敦賀轉乘",icon:"🚄",c:[35.6455612,136.0754851]},{label:"名古屋站",icon:"🏨",c:[35.1723176,136.8821393]},{label:"YORONIKU",icon:"🥩",c:[35.1760205,136.9083903]},{label:"綠洲21",icon:"🌃",c:[35.1760205,136.9083903]}],
    timeline:[
      {time:"08:00",end:"09:10",icon:"🏨",title:"山樂酒店早餐與退房",detail:"享用自助早餐，辦理退房手續。"},
      {time:"09:15",end:"09:30",icon:"🚕",title:"山樂酒店 → 金澤站",detail:"飯店門口搭計程車直達東口，車程約5分鐘，約1,000円。"},
-     {time:"09:55",end:"10:36",icon:"🚄",title:"北陸新幹線 Tsurugi 15　金澤 → 敦賀",detail:"3車11A/11B，車程41分，抵達敦賀站3樓月台。",status:"booked",statusText:"3車 11A/11B"},
+     {time:"09:55",end:"10:36",icon:"🚄",title:"北陸新幹線 Tsurugi 15　金澤 → 敦賀",detail:"3車11A/11B，車程41分，抵達敦賀站3樓月台。",status:"booked",statusText:"3車 11A/11B",nav:"敦賀駅"},
      {time:"10:36",end:"11:10",icon:"🛗",title:"敦賀站立體轉乘",detail:"搭專屬電扶梯/電梯由3樓下至1樓在來線月台，34分鐘轉乘時間充裕。"},
-     {time:"11:10",end:"12:48",icon:"🚄",title:"特急白鷺 6 號　敦賀 → 名古屋",detail:"5車6C/6D，車程1小時38分，直達JR名古屋站。",status:"booked",statusText:"5車 6C/6D"},
-     {time:"12:55",end:"13:20",icon:"🚕",title:"名古屋站 → 日航尚格酒店",detail:"廣小路口搭計程車（約5分，700–800円）直送櫃檯寄存大行李。"},
-     {time:"13:30",end:"16:30",icon:"🍰",title:"榮商圈 HARBS 午茶 & 逛街",detail:"招牌水果千層蛋糕，久屋大通公園、松坂屋、PARCO。"},
-     {time:"16:50",end:"19:00",icon:"🥩",title:"YORONIKU NAGOYA　頂級燒肉晚餐",detail:"全套專人桌邊代烤，2人席。",status:"booked",statusText:"已預約 17:00・16:50前報到"},
-     {time:"19:15",end:"21:00",icon:"🌃",title:"綠洲21「水之宇宙船」夜景",detail:"天橋散步消食，欣賞電視塔夜間點燈，之後返回日航尚格正式Check-in。"}
+     {time:"11:10",end:"12:48",icon:"🚄",title:"特急白鷺 6 號　敦賀 → 名古屋",detail:"5車6C/6D，車程1小時38分，直達JR名古屋站。",status:"booked",statusText:"5車 6C/6D",nav:"名古屋駅"},
+     {time:"12:55",end:"13:20",icon:"🚕",title:"名古屋站 → 日航尚格酒店",detail:"廣小路口搭計程車（約5分，700–800円）直送櫃檯寄存大行李。",nav:"NIKKO STYLE NAGOYA"},
+     {time:"13:30",end:"16:30",icon:"🍰",title:"榮商圈 HARBS 午茶 & 逛街",detail:"招牌水果千層蛋糕，久屋大通公園、松坂屋、PARCO。",nav:"HARBS 名古屋"},
+     {time:"16:50",end:"19:00",icon:"🥩",title:"YORONIKU NAGOYA　頂級燒肉晚餐",detail:"全套專人桌邊代烤，2人席。",status:"booked",statusText:"已預約 17:00・16:50前報到",nav:"YORONIKU 名古屋"},
+     {time:"19:15",end:"21:00",icon:"🌃",title:"綠洲21「水之宇宙船」夜景",detail:"天橋散步消食，欣賞電視塔夜間點燈，之後返回日航尚格正式Check-in。",nav:"オアシス21"}
    ],
    alerts:[
      {level:"must",text:"YORONIKU 為全程唯一需網路預約的餐廳，全套專人代烤，遲到將壓縮用餐時間甚至被取消席位 — 務必 16:50 前抵達門口報到！"},
@@ -671,15 +678,15 @@ var DAYS = [
    luggage:"隨新幹線及特急隨身攜帶，抵名古屋後計程車直送飯店寄存。"
   },
   {n:7,date:"2026-09-15",weekday:"一",route:"名古屋市區經典一日遊",hotel:"NIKKO STYLE NAGOYA",hotelNote:"連住第2晚",
-   mapNodes:[{label:"名駅",icon:"🍞"},{label:"熱田神宮",icon:"⛩️"},{label:"蓬萊軒",icon:"🐟"},{label:"大須",icon:"🐸"},{label:"名古屋城",icon:"🏯"}],
+   mapNodes:[{label:"名駅",icon:"🍞",c:[35.1723176,136.8821393]},{label:"熱田神宮",icon:"⛩️",c:[35.1254307,136.9092535]},{label:"蓬萊軒",icon:"🐟",c:[35.1254307,136.9092535]},{label:"大須",icon:"🐸",c:[35.1596663,136.8993099]},{label:"名古屋城",icon:"🏯",c:[35.1843960,136.9000992]}],
    timeline:[
-     {time:"08:00",end:"09:20",icon:"🍞",title:"つばめパン&Milk 名駅店　早餐",detail:"現烤厚切吐司、小倉紅豆奶油吐司、熔岩起司吐司。純現場排隊，08:00前後人潮較少。"},
+     {time:"08:00",end:"09:20",icon:"🍞",title:"つばめパン&Milk 名駅店　早餐",detail:"現烤厚切吐司、小倉紅豆奶油吐司、熔岩起司吐司。純現場排隊，08:00前後人潮較少。",nav:"つばめパン&Milk 名駅店"},
      {time:"09:30",end:"09:50",icon:"🚃",title:"名駅 → 神宮前站",detail:"名鐵名古屋本線特急/急行皆可，車程6–8分，單程240円。"},
-     {time:"10:30",end:"10:35",icon:"🎫",title:"蓬萊軒　登記領牌",detail:"10:30正式發號，登記人數取得「第一批11:30入座」號碼單。",status:"queue",statusText:"10:20抵達排入領號隊伍"},
-     {time:"10:35",end:"11:25",icon:"⛩️",title:"熱田神宮參拜 & 草薙館",detail:"本宮參拜、林蔭參道散步；草薙館名刀展，體驗手持真劍與大太刀（門票500円）。"},
-     {time:"11:30",end:"12:45",icon:"🐟",title:"蓬萊軒　第一批入座享用鰻魚飯",detail:"炭香「Hitsumabushi 鰻魚飯三吃」×2，準時第一批入座、零等候。",status:"booked",statusText:"11:30第一批入座"},
-     {time:"13:05",end:"14:50",icon:"🐸",title:"大須商店街 & 青柳總本家",detail:"參拜大須觀音寺、逛昭和風老街；青柳總本家大須本店品嚐青蛙饅頭。"},
-     {time:"15:10",end:"16:40",icon:"🏯",title:"名古屋城 & 本丸御殿",detail:"國寶級本丸御殿（門票500円，出示地鐵一日券優惠400円），16:00停止入場。"},
+     {time:"10:30",end:"10:35",icon:"🎫",title:"蓬萊軒　登記領牌",detail:"10:30正式發號，登記人數取得「第一批11:30入座」號碼單。",status:"queue",statusText:"10:20抵達排入領號隊伍",nav:"あつた蓬莱軒 神宮店"},
+     {time:"10:35",end:"11:25",icon:"⛩️",title:"熱田神宮參拜 & 草薙館",detail:"本宮參拜、林蔭參道散步；草薙館名刀展，體驗手持真劍與大太刀（門票500円）。",nav:"熱田神宮"},
+     {time:"11:30",end:"12:45",icon:"🐟",title:"蓬萊軒　第一批入座享用鰻魚飯",detail:"炭香「Hitsumabushi 鰻魚飯三吃」×2，準時第一批入座、零等候。",status:"booked",statusText:"11:30第一批入座",nav:"あつた蓬莱軒 神宮店"},
+     {time:"13:05",end:"14:50",icon:"🐸",title:"大須商店街 & 青柳總本家",detail:"參拜大須觀音寺、逛昭和風老街；青柳總本家大須本店品嚐青蛙饅頭。",nav:"大須観音"},
+     {time:"15:10",end:"16:40",icon:"🏯",title:"名古屋城 & 本丸御殿",detail:"國寶級本丸御殿（門票500円，出示地鐵一日券優惠400円），16:00停止入場。",nav:"名古屋城"},
      {time:"17:15",end:null,icon:"🛍️",title:"名驛採買伴手禮 & 打包行李",detail:"名驛高島屋、名鐵百貨地下街採買，回房整理次日返台行李。"}
    ],
    alerts:[
@@ -690,12 +697,12 @@ var DAYS = [
    luggage:"大行李留置日航尚格房間內，輕裝隨身包出發。"
   },
   {n:8,date:"2026-09-16",weekday:"二",route:"名古屋 → 中部國際機場 → 桃園",hotel:"—",hotelNote:"返家日，無住宿",
-   mapNodes:[{label:"日航尚格",icon:"🏨"},{label:"名鐵名古屋",icon:"🚄"},{label:"NGO機場",icon:"✈️"},{label:"桃園TPE",icon:"🏠"}],
+   mapNodes:[{label:"日航尚格",icon:"🏨",c:[35.1723176,136.8821393]},{label:"名鐵名古屋",icon:"🚄",c:[35.1723176,136.8821393]},{label:"NGO機場",icon:"✈️",c:[34.8599396,136.8161753]}],
    timeline:[
      {time:"07:30",end:"08:30",icon:"🏨",title:"日航尚格酒店早餐 & 退房準備",detail:"享用在地特色早餐，進行隨身行李與免稅單據最後盤點。"},
      {time:"08:35",end:"08:45",icon:"🧳",title:"辦理退房手續",detail:"櫃檯結帳退房，拉大行李箱出發。"},
      {time:"08:45",end:"09:00",icon:"🚕",title:"日航尚格 → 名鐵名古屋站",detail:"建議飯店門口叫計程車（約3–5分，700–900円），或沿廣小路通步行約10–12分鐘。"},
-     {time:"09:20",end:"09:48",icon:"🚄",title:"μ-SKY 直達中部國際機場",detail:"全車特別車，大行李箱放入車廂專用行李架。備案：09:31 / 09:50 班次。",status:"open",statusText:"名鐵名古屋第3月台"},
+     {time:"09:20",end:"09:48",icon:"🚄",title:"μ-SKY 直達中部國際機場",detail:"全車特別車，大行李箱放入車廂專用行李架。備案：09:31 / 09:50 班次。",status:"open",statusText:"名鐵名古屋第3月台",nav:"中部国際空港"},
      {time:"09:50",end:"10:45",icon:"🛂",title:"第一航廈報到、托運與安檢",detail:"步行穿過交通廣場抵達3樓出境大廳，辦理華航CI0155報到、行李托運、安檢與出境審查。"},
      {time:"10:45",end:"11:45",icon:"🛍️",title:"免稅店採購",detail:"北陸及愛知伴手禮：坂角蝦餅、赤福餅、小倉紅豆夾心餅乾。"},
      {time:"11:50",end:"12:20",icon:"🛫",title:"登機門候機 & 起飛",detail:"CI0155 12:20 自NGO起飛，預計14:30抵達桃園TPE（飛行約3小時10分）。"}
@@ -796,6 +803,7 @@ function ymd(d){return d.getFullYear()+"-"+pad(d.getMonth()+1)+"-"+pad(d.getDate
 function parseYMD(s){var p=s.split("-");return new Date(+p[0],+p[1]-1,+p[2]);}
 function fmtInt(n){return Math.round(n).toLocaleString("en-US");}
 function minutesOf(hhmm){var p=hhmm.split(":");return (+p[0])*60+(+p[1]);}
+function gmapsUrl(place){ return "https://www.google.com/maps/search/?api=1&query="+encodeURIComponent(place); }
 
 var now = new Date();
 var todayYMD = ymd(now);
@@ -973,7 +981,10 @@ function selectDay(n){
     if(st==="current") html += '<span class="now-flag">現在</span>';
     if(st==="next") html += '<span class="next-flag">接下來</span>';
     html += '</div><div class="t-detail">'+item.detail+'</div>';
+    if(item.status || item.nav){ html += '<div class="t-tags">'; }
     if(item.status){ html += '<span class="status-pill '+item.status+'">'+(item.statusText||statusMap[item.status])+'</span>'; }
+    if(item.nav){ html += '<a class="t-nav" href="'+gmapsUrl(item.nav)+'" target="_blank" rel="noopener">📍 Google Maps</a>'; }
+    if(item.status || item.nav){ html += '</div>'; }
     html += '</div></div>';
   });
   html += '</div>';
@@ -998,209 +1009,97 @@ function selectDay(n){
 }
 renderScroller();
 
-/* ---------- canvas: loop map (overview) ---------- */
+/* ---------- maps: Leaflet + OpenStreetMap ---------- */
 function cssVar(name){ return getComputedStyle(document.documentElement).getPropertyValue(name).trim(); }
-function setupCanvas(canvas){
-  var dpr = window.devicePixelRatio || 1;
-  var rect = canvas.getBoundingClientRect();
-  if(rect.width===0) return null;
-  canvas.width = Math.round(rect.width*dpr);
-  canvas.height = Math.round(rect.height*dpr);
-  var ctx = canvas.getContext("2d");
-  ctx.setTransform(dpr,0,0,dpr,0,0);
-  return {ctx:ctx, w:rect.width, h:rect.height};
-}
 
 var LOOP_STOPS = [
-  {label:"中部機場",sub:"Day1 抵達・Day8 出發",activeDays:[8],doneDay:8},
-  {label:"名古屋",sub:"Day1",activeDays:[1],doneDay:1},
-  {label:"高山",sub:"Day2・3",activeDays:[2],doneDay:2},
-  {label:"白川鄉",sub:"Day4",activeDays:[],doneDay:4},
-  {label:"金澤",sub:"Day4・5",activeDays:[4,5],doneDay:5},
-  {label:"名古屋",sub:"Day6・7",activeDays:[6,7],doneDay:7}
+  {label:"中部機場",sub:"Day1 抵達・Day8 出發",icon:"✈️",activeDays:[1,8],doneDay:8,c:[34.8599396,136.8161753]},
+  {label:"名古屋",sub:"Day1・6・7",icon:"🏨",activeDays:[6,7],doneDay:7,c:[35.1723176,136.8821393]},
+  {label:"高山",sub:"Day2・3",icon:"🏨",activeDays:[2],doneDay:2,c:[36.1460989,137.2521823]},
+  {label:"白川鄉",sub:"Day4",icon:"🏘️",activeDays:[4],doneDay:4,c:[36.2620171,136.9068702]},
+  {label:"金澤",sub:"Day4・5",icon:"🏨",activeDays:[5],doneDay:5,c:[36.5773191,136.6472778]}
 ];
-var SPUR_STOP = {label:"上高地",sub:"Day3 來回",activeDays:[3],doneDay:3};
-var DAY_T = {1:1/6, 2:2/6, 3:2.5/6, 4:3.5/6, 5:4/6, 6:4.5/6, 7:5/6, 8:1};
+var SPUR_STOP = {label:"上高地",sub:"Day3 來回",icon:"🏞️",activeDays:[3],doneDay:3,c:[36.2487647,137.6384190]};
+var ROUTE_PATH = [LOOP_STOPS[0].c, LOOP_STOPS[1].c, LOOP_STOPS[2].c, LOOP_STOPS[3].c, LOOP_STOPS[4].c, LOOP_STOPS[1].c, LOOP_STOPS[0].c];
 
-function loopPoint(cx,cy,rx,ry,t){
-  var a = -Math.PI/2 + t*Math.PI*2;
-  return {x:cx+rx*Math.cos(a), y:cy+ry*Math.sin(a)};
+function stopState(stop){
+  var isActive = tripPhase==="during" && activeDay && stop.activeDays.indexOf(activeDay)>=0;
+  var isDone = tripPhase==="after" || (tripPhase==="during" && activeDay && activeDay>stop.doneDay);
+  return isActive ? "active" : (isDone ? "done" : "upcoming");
 }
 
-function drawLoopMap(){
-  var canvas = document.getElementById("loopMap");
-  var setup = setupCanvas(canvas);
-  if(!setup) return;
-  var ctx=setup.ctx, w=setup.w, h=setup.h;
-  ctx.clearRect(0,0,w,h);
-  var compact = w < 480;
-  var cx=w/2, cy=h/2+6, rx=w*(compact?0.30:0.36), ry=h*(compact?0.30:0.34);
-  var lineCol = cssVar("--line-strong");
-  var vermilion = cssVar("--vermilion");
-  var gold = cssVar("--gold");
-  var ink = cssVar("--ink");
-  var inkSoft = cssVar("--ink-soft");
-  var surface = cssVar("--surface");
-
-  var n = LOOP_STOPS.length;
-  var progressT = 0;
-  if(tripPhase==="after") progressT = 1;
-  else if(tripPhase==="during" && activeDay){
-    progressT = DAY_T[activeDay] || 0;
-  }
-
-  ctx.lineWidth = 2.5;
-  ctx.setLineDash([]);
-  ctx.beginPath();
-  for(var i=0;i<=n;i++){
-    var t=i/n; var p=loopPoint(cx,cy,rx,ry,t);
-    if(i===0) ctx.moveTo(p.x,p.y); else ctx.lineTo(p.x,p.y);
-  }
-  ctx.strokeStyle = tripPhase==="after" ? gold : lineCol;
-  ctx.stroke();
-
-  if(progressT>0){
-    ctx.beginPath();
-    var steps=200;
-    for(var s=0;s<=steps*progressT;s++){
-      var t2=(s/steps); var p2=loopPoint(cx,cy,rx,ry,t2);
-      if(s===0) ctx.moveTo(p2.x,p2.y); else ctx.lineTo(p2.x,p2.y);
-    }
-    ctx.strokeStyle = vermilion;
-    ctx.lineWidth = 3;
-    ctx.stroke();
-  }
-
-  var takayamaT = 2/n;
-  var takayamaPt = loopPoint(cx,cy,rx,ry,takayamaT);
-  var spurPt = {x:takayamaPt.x, y:takayamaPt.y-ry*0.62};
-  ctx.beginPath();
-  ctx.setLineDash([4,5]);
-  ctx.moveTo(takayamaPt.x,takayamaPt.y);
-  ctx.lineTo(spurPt.x,spurPt.y);
-  ctx.strokeStyle = tripPhase==="during" && activeDay===3 ? vermilion : inkSoft;
-  ctx.lineWidth=2;
-  ctx.stroke();
-  ctx.setLineDash([]);
-
-  function drawNode(p, label, sub, isDone, isActive){
-    var r = isActive?8:6.5;
-    if(isActive){
-      ctx.beginPath();
-      ctx.arc(p.x,p.y,r,0,Math.PI*2);
-      ctx.fillStyle = vermilion;
-      ctx.fill();
-      ctx.lineWidth = 1.6;
-      ctx.strokeStyle = vermilion;
-      ctx.stroke();
-      ctx.beginPath();
-      ctx.arc(p.x,p.y,r+3,0,Math.PI*2);
-      ctx.lineWidth = 1;
-      ctx.strokeStyle = vermilion;
-      ctx.stroke();
-    } else if(isDone){
-      ctx.beginPath();
-      ctx.arc(p.x,p.y,r,0,Math.PI*2);
-      ctx.fillStyle = ink;
-      ctx.fill();
-      ctx.lineWidth = 1.4;
-      ctx.strokeStyle = ink;
-      ctx.stroke();
-    } else {
-      ctx.beginPath();
-      ctx.setLineDash([2,3]);
-      ctx.arc(p.x,p.y,r,0,Math.PI*2);
-      ctx.fillStyle = surface;
-      ctx.fill();
-      ctx.lineWidth = 1.6;
-      ctx.strokeStyle = inkSoft;
-      ctx.stroke();
-      ctx.setLineDash([]);
-    }
-    ctx.fillStyle = ink;
-    ctx.font = (compact?"700 10.5px ":"700 12px ")+"'Noto Sans TC', sans-serif";
-    ctx.textAlign = p.x>cx ? "left" : (Math.abs(p.x-cx)<4 ? "center":"right");
-    var lx = p.x + (p.x>cx? 10 : (Math.abs(p.x-cx)<4?0:-10));
-    var ly = p.y < cy ? p.y-10 : p.y+18;
-    ctx.fillText(label, lx, ly);
-    if(!compact){
-      ctx.fillStyle = inkSoft;
-      ctx.font = "500 10.5px 'JetBrains Mono', monospace";
-      ctx.fillText(sub, lx, ly + (p.y<cy?-13:14));
-    }
-  }
-
-  var liveDotPos=null, liveDotState="start";
-  LOOP_STOPS.forEach(function(stop,i){
-    var t=i/n; var p=loopPoint(cx,cy,rx,ry,t);
-    var isDone = tripPhase==="after" || (tripPhase==="during" && activeDay && activeDay>stop.doneDay);
-    var isActive = tripPhase==="during" && activeDay && stop.activeDays.indexOf(activeDay)>=0;
-    drawNode(p, stop.label, stop.sub, isDone, isActive);
-    if(isActive){ liveDotPos=p; liveDotState="live"; }
+function makeEmojiPin(emoji, state, size){
+  size = size||28;
+  return L.divIcon({
+    className:"",
+    html:'<div class="pin pin-'+state+'" style="width:'+size+'px;height:'+size+'px;font-size:'+Math.round(size*0.52)+'px;">'+emoji+'</div>',
+    iconSize:[size,size], iconAnchor:[size/2,size/2]
   });
-  var spurActive = tripPhase==="during" && activeDay && SPUR_STOP.activeDays.indexOf(activeDay)>=0;
-  var spurDone = tripPhase==="after" || (tripPhase==="during" && activeDay>SPUR_STOP.doneDay);
-  drawNode(spurPt, SPUR_STOP.label, SPUR_STOP.sub, spurDone, spurActive);
-  if(spurActive){ liveDotPos=spurPt; liveDotState="live"; }
-
-  if(!liveDotPos && tripPhase==="before"){ liveDotPos = loopPoint(cx,cy,rx,ry,0); liveDotState="start"; }
-  if(!liveDotPos && tripPhase==="after"){ liveDotPos = loopPoint(cx,cy,rx,ry,0); liveDotState="done"; }
-
-  var overlay = canvas.parentElement.querySelector(".live-dot");
-  if(overlay) overlay.remove();
-  if(liveDotPos){
-    var dot = document.createElement("div");
-    dot.className = "live-dot" + (liveDotState==="start"?" start":"") + (liveDotState==="done"?" done":"");
-    dot.style.left = liveDotPos.x+"px";
-    dot.style.top = liveDotPos.y+"px";
-    canvas.parentElement.appendChild(dot);
-  }
 }
 
+var TILE_URL = "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png";
+var TILE_ATTR = '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> contributors';
+
+var loopMapInstance=null, loopMapLayer=null;
+function drawLoopMap(){
+  var el = document.getElementById("loopMap");
+  if(!el || (el.offsetWidth===0 && !loopMapInstance)) return;
+  if(!loopMapInstance){
+    loopMapInstance = L.map(el, {scrollWheelZoom:false});
+    L.tileLayer(TILE_URL, {maxZoom:17, attribution:TILE_ATTR}).addTo(loopMapInstance);
+    loopMapLayer = L.layerGroup().addTo(loopMapInstance);
+  }
+  loopMapLayer.clearLayers();
+
+  L.polyline(ROUTE_PATH, {color:cssVar("--line-strong"), weight:3, opacity:.9}).addTo(loopMapLayer);
+  L.polyline([LOOP_STOPS[2].c, SPUR_STOP.c], {color:cssVar("--ink-soft"), weight:2, dashArray:"5,6"}).addTo(loopMapLayer);
+
+  LOOP_STOPS.concat([SPUR_STOP]).forEach(function(stop){
+    var state = stopState(stop);
+    L.marker(stop.c, {icon: makeEmojiPin(stop.icon, state, state==="active"?32:26)})
+      .bindTooltip(stop.label+"・"+stop.sub, {permanent:true, direction:"top", offset:[0,-14]})
+      .addTo(loopMapLayer);
+  });
+
+  requestAnimationFrame(function(){
+    loopMapInstance.invalidateSize();
+    loopMapInstance.fitBounds(L.latLngBounds(ROUTE_PATH.concat([SPUR_STOP.c])), {padding:[30,30]});
+  });
+}
+
+var dayMapInstance=null, dayMapLayer=null;
 function drawDayMap(){
-  var canvas = document.getElementById("dayMap");
-  var setup = setupCanvas(canvas);
-  if(!setup) return;
-  var ctx=setup.ctx, w=setup.w, h=setup.h;
-  ctx.clearRect(0,0,w,h);
+  var el = document.getElementById("dayMap");
+  if(!el || (el.offsetWidth===0 && !dayMapInstance)) return;
+  if(!dayMapInstance){
+    dayMapInstance = L.map(el, {scrollWheelZoom:false});
+    L.tileLayer(TILE_URL, {maxZoom:17, attribution:TILE_ATTR}).addTo(dayMapInstance);
+    dayMapLayer = L.layerGroup().addTo(dayMapInstance);
+  }
+  dayMapLayer.clearLayers();
   var day = DAYS[currentDayIdx-1];
   var nodes = day.mapNodes;
-  var padX = w<380?30:44;
-  var y = h/2;
-  var indigo = cssVar("--indigo"), ink=cssVar("--ink"), inkSoft=cssVar("--ink-soft"), surface=cssVar("--surface"), vermilion=cssVar("--vermilion");
+  var coords = nodes.map(function(n){ return n.c; });
 
-  ctx.beginPath();
-  ctx.moveTo(padX,y); ctx.lineTo(w-padX,y);
-  ctx.strokeStyle = cssVar("--line-strong");
-  ctx.lineWidth=2;
-  ctx.stroke();
-
+  L.polyline(coords, {color:cssVar("--line-strong"), weight:3, opacity:.9}).addTo(dayMapLayer);
   nodes.forEach(function(node,i){
-    var x = padX + (w-padX*2) * (i/(nodes.length-1||1));
-    ctx.beginPath();
-    ctx.arc(x,y,5,0,Math.PI*2);
-    ctx.fillStyle = surface;
-    ctx.strokeStyle = i===0||i===nodes.length-1 ? vermilion : indigo;
-    ctx.lineWidth=2.5;
-    ctx.fill(); ctx.stroke();
+    var state = (i===0 || i===nodes.length-1) ? "active" : "plain";
+    L.marker(node.c, {icon: makeEmojiPin(node.icon, state, 28)})
+      .bindTooltip(node.label, {direction:"top", offset:[0,-15]})
+      .addTo(dayMapLayer);
+  });
 
-    ctx.font = (w<380?"18px ":"22px ")+"sans-serif";
-    ctx.textAlign="center";
-    ctx.fillText(node.icon, x, y-18);
-
-    ctx.font = "600 "+(w<380?"10px ":"11.5px ")+"'Noto Sans TC', sans-serif";
-    ctx.fillStyle = ink;
-    ctx.fillText(node.label, x, y+24);
+  requestAnimationFrame(function(){
+    dayMapInstance.invalidateSize();
+    if(coords.length) dayMapInstance.fitBounds(L.latLngBounds(coords), {padding:[28,28]});
   });
 }
 
 window.addEventListener("resize", debounce(function(){
-  drawLoopMap(); drawDayMap();
+  if(loopMapInstance) loopMapInstance.invalidateSize();
+  if(dayMapInstance) dayMapInstance.invalidateSize();
 }, 150));
 function debounce(fn,ms){ var t; return function(){ clearTimeout(t); var a=arguments; t=setTimeout(function(){fn.apply(null,a);},ms); }; }
-if(window.matchMedia){
-  window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", function(){ drawLoopMap(); drawDayMap(); });
-}
 
 /* ---------- budget + live FX ---------- */
 var fxInput = document.getElementById("fxInput");
